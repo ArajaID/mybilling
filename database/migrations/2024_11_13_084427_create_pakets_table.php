@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama_paket');
             $table->bigInteger('harga');
-            $table->bigInteger('bandwidth');
+            $table->string('bandwidth');
             $table->boolean('is_active')->default(1);
             $table->timestamps();
         });

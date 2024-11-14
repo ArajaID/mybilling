@@ -7,19 +7,28 @@
 @stop
 
 @section('content')
-    <a href={{ route('paket.create') }} class="btn btn-primary ">Tambah Paket</a>
+    <div class="mb-2">
+
+        <a href={{ route('paket.create') }} class="btn btn-primary ">Tambah Paket</a>
+    </div>
 
     <div class="card">
         <div class="p-0 card-body">
             <table class="table table-striped">
                 <thead>
                     <tr>
+                        <th>No</th>
                         <th>Nama Paket</th>
                         <th>Kecepatan</th>
+                        <th>Harga</th>
                     </tr>
                 </thead>
                 <tbody>
-
+                    @foreach ($paketInet as $data)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use RouterOS\Query;
+use RouterOS\Client;
+use App\Models\Paket;
 use Illuminate\Http\Request;
 
 class PaketController extends Controller
@@ -11,7 +14,11 @@ class PaketController extends Controller
      */
     public function index()
     {
-        return view('paket.index');
+        $dataPaket = Paket::all();
+
+        return view('paket.index', [
+            'paketInet' => $dataPaket
+        ]);
     }
 
     /**
@@ -19,7 +26,19 @@ class PaketController extends Controller
      */
     public function create()
     {
-        //
+         // Initiate client with config object
+        $client = new Client(config('mikrotik.credential'));
+
+        // Create "where" Query object for RouterOS
+        $query =
+            (new Query('/ppp/profile/print'));
+
+        // Send query and read response from RouterOS
+        $pppProfile = $client->query($query)->read();
+
+        return view('paket.create', [
+            'ppp' => $pppProfile
+        ]);
     }
 
     /**
@@ -27,7 +46,7 @@ class PaketController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**
