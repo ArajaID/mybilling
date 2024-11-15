@@ -46,7 +46,16 @@ class PaketController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        $validateData = $request->validate([
+            'nama_paket' => 'required|max:255',
+            'harga' => 'required',
+            'bandwidth' => 'required',
+        ]);
+
+        Paket::create($validateData);
+
+        toast('Paket berhasil ditambah!','success');
+        return redirect()->route('paket.index');
     }
 
     /**

@@ -27,6 +27,9 @@
                     @foreach ($paketInet as $data)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
+                            <td>{{ $data->nama_paket }}</td>
+                            <td>{{ $data->bandwidth }}</td>
+                            <td>@currency($data->harga)</td>
                         </tr>
                     @endforeach
                 </tbody>
