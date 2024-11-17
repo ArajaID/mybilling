@@ -8,7 +8,6 @@
 
 @section('content')
     <div class="mb-2">
-
         <a href={{ route('paket.create') }} class="btn btn-primary ">Tambah Paket</a>
     </div>
 

@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('tb_pelanggan', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_pelanggan')->unique();
             $table->string('nama_pelanggan');
             $table->string('email')->nullable();
             $table->string('no_telepon')->nullable();
-            $table->string('blok');
-            $table->string('rt');
-            $table->string('area')->nullable();
+            $table->string('blok')->nullable();
+            $table->string('rt')->nullable();
+            $table->enum('area', ['perumahan', 'diluar_perumahan'])->nullable();
             $table->string('odc_odp')->nullable();
             $table->unsignedBigInteger('id_paket')->nullable();
 
@@ -29,6 +30,7 @@ return new class extends Migration
             $table->string('user_pppoe');
             $table->string('password_pppoe');
             $table->boolean('is_active')->default(1);
+            $table->boolean('aktivasi_layanan')->default(0);
             $table->timestamps();
         });
     }

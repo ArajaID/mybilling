@@ -7,20 +7,31 @@
 @stop
 
 @section('content')
+    <div class="mb-2">
+        <a href={{ route('pelanggan.create') }} class="btn btn-primary ">Tambah Pelanggan</a>
+    </div>
+
     <div class="card">
         <div class="p-0 card-body">
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Username PPPoE</th>
-                        <th>Password PPPoE</th>
-                        <th>Caller ID</th>
+                        <th>No</th>
+                        <th>Kode Pelanggan</th>
+                        <th>Nama Pelanggan</th>
                         <th>Paket</th>
-                        <th>Status Bayar</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-
+                    @foreach ($pelanggan as $data)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $data->kode_pelanggan }}</td>
+                            <td>{{ $data->nama_pelanggan }}</td>
+                            <td>{{ $data->paket->nama_paket }}</td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
