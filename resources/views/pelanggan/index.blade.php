@@ -30,6 +30,10 @@
                             <td>{{ $data->kode_pelanggan }}</td>
                             <td>{{ $data->nama_pelanggan }}</td>
                             <td>{{ $data->paket->nama_paket }}</td>
+                            <td>
+                                <a href="">Detail</a>
+                                <a href="">Aktivasi</a>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

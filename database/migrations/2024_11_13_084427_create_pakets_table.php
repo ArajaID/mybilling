@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tb_paket', function (Blueprint $table) {
             $table->id();
             $table->string('nama_paket');
-            $table->bigInteger('harga');
+            $table->decimal('harga', 10, 2);
             $table->string('bandwidth');
             $table->boolean('is_active')->default(1);
             $table->timestamps();

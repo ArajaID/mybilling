@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Paket;
+use App\Models\Promo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -12,6 +13,11 @@ class Pelanggan extends Model
 
     protected $table = "tb_pelanggan";
     protected $guarded = ['id'];
+
+    public function promo()
+    {
+        return $this->belongsToMany(Promo::class);
+    }
 
     public function paket()
     {

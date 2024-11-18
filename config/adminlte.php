@@ -312,19 +312,34 @@ return [
             'icon'  => 'fas fa-fw fa-chart-line',
         ],
         [
-            'text'  => 'Daftar Paket',
-            'url'   => 'paket',
-            'icon'  => 'fas fa-fw fa-coins',
+            'header' => 'DATA MASTER',
         ],
         [
-            'text'  => 'Pelanggan',
-            'url'   => 'pelanggan',
-            'icon'  => 'fas fa-fw fa-users',
+            'text'      => 'Daftar Paket',
+            'url'       => 'paket',
+            'icon'      => 'fas fa-fw fa-coins',
+            'active'    => ['paket', 'paket', 'paket*', 'regex:@^paket/[0-9]+$@']
         ],
         [
-            'text'  => 'Promo',
-            'url'   => 'admin/settings',
-            'icon'  => 'fas fa-fw fa-percent',
+            'text'      => 'Pelanggan',
+            'url'       => 'pelanggan',
+            'icon'      => 'fas fa-fw fa-users',
+            'active'    => ['pelanggan', 'pelanggan', 'pelanggan*', 'regex:@^pelanggan/[0-9]+$@']
+        ],
+        [
+            'text'      => 'Promo',
+            'url'       => 'promo',
+            'icon'      => 'fas fa-fw fa-percent',
+            'active'    => ['promo', 'promo', 'promo*', 'regex:@^promo/[0-9]+$@']
+        ],
+        [
+            'header' => 'AKTIVASI LAYANAN',
+        ],
+        [
+            'text'      => 'Layanan',
+            'url'       => 'aktivasi-layanan',
+            'icon'      => 'fas fa-fw fa-key',
+            'active'    => ['aktivasi-layanan', 'aktivasi-layanan', 'aktivasi-layanan*', 'regex:@^aktivasi-layanan/[0-9]+$@']
         ],
         [
             'text' => 'Keuangan',
@@ -419,12 +434,17 @@ return [
                 [
                     'type' => 'js',
                     'asset' => true,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js',
+                    'location' => 'vendor/select2/js/select2.full.min.js',
                 ],
                 [
                     'type' => 'css',
                     'asset' => true,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css',
+                    'location' => 'vendor/select2/css/select2.min.css',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/select2-bootstrap4-theme/select2-bootstrap4.min.css',
                 ],
             ],
         ],

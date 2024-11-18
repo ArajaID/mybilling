@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Paket;
+use App\Models\Promo;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -38,6 +39,11 @@ class DatabaseSeeder extends Seeder
             'nama_paket' => 'Paket Upto 20',
             'harga' => 230000,
             'bandwidth' => "bw20",
+        ]);
+
+        Promo::create([
+            'kode_promo' => 0,
+            'nama_promo' => 'Tanpa Promo'
         ]);
     }
 }

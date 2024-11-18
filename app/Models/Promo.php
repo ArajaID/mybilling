@@ -6,15 +6,16 @@ use App\Models\Pelanggan;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Paket extends Model
+class Promo extends Model
 {
     use HasFactory;
 
-    protected $table = "tb_paket";
+    protected $table = "tb_promo";
     protected $guarded = ['id'];
 
     public function pelanggan()
     {
-        return $this->hasMany(Pelanggan::class);
+        return $this->belongsToMany(Pelanggan::class);
     }
+
 }

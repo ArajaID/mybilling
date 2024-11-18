@@ -51,7 +51,7 @@
                     </div>
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary">Simpan</button>
-                        <a href="{{ route('paket.index') }}" class="btn btn-warning">Batal</a>
+                        <a href="{{ route('pelanggan.index') }}" class="btn btn-warning">Batal</a>
                     </div>
                 </form>
             </div>
