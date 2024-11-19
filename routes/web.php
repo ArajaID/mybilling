@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/tagihan-terima', [TagihanController::class, 'create'])->name('tagihan.create');
     Route::post('/tagihan', [TagihanController::class, 'store'])->name('tagihan.store');
 
-    Route::get('/pemasukan', [PemasukanController::class, 'create'])->name('pemasukan.create');
+    Route::get('/pemasukan', [PemasukanController::class, 'index'])->name('pemasukan.index');
+    Route::get('/pemasukan-tambah', [PemasukanController::class, 'create'])->name('pemasukan.create');
     Route::get('/pengeluaran', [PengeluaranController::class, 'create'])->name('pengeluaran.create');
 });

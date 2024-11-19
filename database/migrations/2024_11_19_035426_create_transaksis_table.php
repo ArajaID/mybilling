@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->enum('jenis_transaksi', ['Pemasukan', 'Pengeluaran']);
             $table->string('sumber');
-            $table->decimal('jumlah', 10, 2);
+            $table->decimal('debit', 10, 2)->nullable();
+            $table->decimal('kredit', 10, 2)->nullable();
             $table->string('kategori')->nullable();
             $table->string('metode_pembayaran')->nullable();
             $table->timestamps();

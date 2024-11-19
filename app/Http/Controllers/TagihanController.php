@@ -38,7 +38,7 @@ class TagihanController extends Controller
         Transaksi::create([
             'jenis_transaksi'   => 'Pemasukan',
             'sumber'            => $request->kode_tagihan,
-            'jumlah'            => $request->jumlah,
+            'debit'             => $request->jumlah,
             'kategori'          => $request->deskripsi,
             'metode_pembayaran' => $request->metode_pembayaran,
         ]);

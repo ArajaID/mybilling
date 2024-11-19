@@ -75,7 +75,7 @@ class AktivasiController extends Controller
                     ->equal('name', $dataPelanggan->user_pppoe)
                     ->equal('password', $dataPelanggan->password_pppoe)
                     ->equal('service', 'pppoe')
-                    ->equal('profile', 'PPP-DIREKTUR')
+                    ->equal('profile', $dataPelanggan->paket->bandwidth)
                     ->equal('local-address', '172.16.10.1')
                     ->equal('comment', $comment);
 
