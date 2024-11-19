@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use RouterOS\Query;
 use RouterOS\Client;
 use App\Models\Promo;
+use App\Models\Tagihan;
 use App\Models\Pelanggan;
 use Illuminate\Http\Request;
 use App\Models\PromoPelanggan;
@@ -40,6 +41,17 @@ class AktivasiController extends Controller
         DB::transaction(function () use ($request) {
             $idPelanggan = $request->id_pelanggan;
             $dataPelanggan = Pelanggan::findOrFail($idPelanggan);
+            $promo = Promo::findOrFail($request->id_promo);
+
+            // Promo Diskon Biaya Pemasangan
+            $biayaPemasangan = 300000;
+
+            if($promo->diskon) {
+                $tagihanDiskon = $biayaPemasangan - $promo->diskon;
+            } else {
+                $tagihanDiskon = $biayaPemasangan;
+            }
+            // Promo Upgrade Speed
 
             $comment = $dataPelanggan->kode_pelanggan . ' | ' . $dataPelanggan->nama_pelanggan;
 
@@ -64,14 +76,22 @@ class AktivasiController extends Controller
                     ->equal('password', $dataPelanggan->password_pppoe)
                     ->equal('service', 'pppoe')
                     ->equal('profile', 'PPP-DIREKTUR')
-                    ->equal('local_address', '172.16.10.1')
+                    ->equal('local-address', '172.16.10.1')
                     ->equal('comment', $comment);
 
             // Send query and read response from RouterOS (ordinary answer from update/create/delete queries has empty body)
             $client->query($query)->read();
 
-            toast('Aktivasi berhasil!','success');
-            return redirect()->route('pelanggan.index');
+            $kodeTagihan = 'INV-' . date('y') . date('m') . date('d') . mt_rand(1000, 9999);
+
+            Tagihan::create([
+                'kode_tagihan'      => $kodeTagihan,
+                'id_pelanggan'      => $idPelanggan,
+                'tanggal_tagihan'   => now(),
+                'jumlah_tagihan'    => $tagihanDiskon,
+                'status_pembayaran' => 'Belum Lunas',
+                'deskripsi'         => 'Biaya Pasang Baru'
+            ]);
         });
 
          /**
@@ -80,5 +100,8 @@ class AktivasiController extends Controller
             * Insert user_pppoe dan password_pppoe ke MikroTik
             * Insert data biaya pemasangan baru ke tb_keuangan
         */
+
+        toast('Aktivasi berhasil!','success');
+            return redirect()->route('pelanggan.index');
     }
 }

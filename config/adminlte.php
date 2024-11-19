@@ -342,7 +342,15 @@ return [
             'active'    => ['aktivasi-layanan', 'aktivasi-layanan', 'aktivasi-layanan*', 'regex:@^aktivasi-layanan/[0-9]+$@']
         ],
         [
-            'text' => 'Keuangan',
+            'header' => 'KEUANGAN',
+        ],
+        [
+            'text'      => 'Tagihan',
+            'url'       => 'tagihan',
+            'icon'      => 'fas fa-fw fa-receipt',
+        ],
+        [
+            'text' => 'Transaksi',
             'icon' => 'fas fa-fw fa-wallet',
             'submenu' => [
                 [

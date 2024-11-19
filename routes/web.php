@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaketController;
 use App\Http\Controllers\PromoController;
+use App\Http\Controllers\TagihanController;
 use App\Http\Controllers\AktivasiController;
 use App\Http\Controllers\PelangganController;
 
@@ -21,5 +22,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/aktivasi-layanan', [AktivasiController::class, 'create'])->name('aktivasi.create');
     Route::post('/aktivasi-layanan', [AktivasiController::class, 'store'])->name('aktivasi.store');
-    
+
+    Route::get('/tagihan', [TagihanController::class, 'index'])->name('tagihan.index');
 });
