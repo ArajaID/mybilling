@@ -6,6 +6,8 @@ use App\Http\Controllers\PromoController;
 use App\Http\Controllers\TagihanController;
 use App\Http\Controllers\AktivasiController;
 use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\PemasukanController;
+use App\Http\Controllers\PengeluaranController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,4 +26,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/aktivasi-layanan', [AktivasiController::class, 'store'])->name('aktivasi.store');
 
     Route::get('/tagihan', [TagihanController::class, 'index'])->name('tagihan.index');
+    Route::get('/tagihan-terima', [TagihanController::class, 'create'])->name('tagihan.create');
+    Route::post('/tagihan', [TagihanController::class, 'store'])->name('tagihan.store');
+
+    Route::get('/pemasukan', [PemasukanController::class, 'create'])->name('pemasukan.create');
+    Route::get('/pengeluaran', [PengeluaranController::class, 'create'])->name('pengeluaran.create');
 });

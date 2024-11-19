@@ -29,10 +29,16 @@
                             <td>{{ $data->pelanggan->kode_pelanggan }}</td>
                             <td>{{ $data->pelanggan->nama_pelanggan }}</td>
                             <td>@currency($data->jumlah_tagihan)</td>
-                            <td>{!! $data->status_pembayaran
+                            <td>{!! $data->status_pembayaran == 'Belum Lunas'
                                 ? "<badge class='badge badge-danger'>Belum Lunas</badge>"
                                 : "<badge class='badge badge-success'>Lunas</badge>" !!}</td>
                             <td>{{ $data->deskripsi }}</td>
+                            <td>
+                                @if ($data->status_pembayaran == 'Belum Lunas')
+                                    <a href="{{ route('tagihan.create') . '?kode_tagihan=' . $data->kode_tagihan }}"
+                                        class="btn btn-primary btn-sm">Penerimaan Tagihan</a>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

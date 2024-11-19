@@ -348,6 +348,7 @@ return [
             'text'      => 'Tagihan',
             'url'       => 'tagihan',
             'icon'      => 'fas fa-fw fa-receipt',
+            'active'    => ['tagihan', 'tagihan', 'tagihan*', 'regex:@^tagihan/[0-9]+$@']
         ],
         [
             'text' => 'Transaksi',
@@ -355,11 +356,11 @@ return [
             'submenu' => [
                 [
                     'text' => 'Pemasukan',
-                    'url' => '#',
+                    'url' => 'pemasukan',
                 ],
                 [
                     'text' => 'Pengeluaran',
-                    'url' => '#',
+                    'url' => 'pengeluaran',
                 ],
             ],
         ],
