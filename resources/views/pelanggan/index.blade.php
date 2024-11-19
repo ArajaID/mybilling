@@ -20,6 +20,7 @@
                         <th>Kode Pelanggan</th>
                         <th>Nama Pelanggan</th>
                         <th>Paket</th>
+                        <th>Status Aktivasi</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -30,9 +31,15 @@
                             <td>{{ $data->kode_pelanggan }}</td>
                             <td>{{ $data->nama_pelanggan }}</td>
                             <td>{{ $data->paket->nama_paket }}</td>
+                            <td>{!! $data->aktivasi_layanan
+                                ? '<badge class="badge badge-success">Sudah Diaktivasi</badge>'
+                                : '<badge class="badge badge-danger">Belum Diaktivasi</badge>' !!}</td>
                             <td>
-                                <a href="">Detail</a>
-                                <a href="">Aktivasi</a>
+                                <a href="" class="btn btn-warning btn-sm"><i class="fas fa-eye"></i> Detail</a>
+                                <a href="{{ route('aktivasi.create') . '?kode_pelanggan=' . $data->kode_pelanggan }}"
+                                    class="btn btn-info btn-sm {{ $data->aktivasi_layanan ? 'disabled' : '' }}"><i
+                                        class="fas fa-key"></i> Aktivasi</a>
+                                <a href="" class="btn btn-dark btn-sm"><i class="fas fa-print"></i> Cetak</a>
                             </td>
                         </tr>
                     @endforeach

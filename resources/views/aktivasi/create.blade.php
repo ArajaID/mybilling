@@ -67,14 +67,15 @@
                 </div>
             </div>
 
-            <form action="" method="POST">
+            <form action="{{ route('aktivasi.store') }}" method="POST">
                 @csrf
 
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
                             <button class="btn btn-primary btn-sm">Aktivasi <i class="fas fa-key"></i></button>
-                            <a href="" class="btn btn-info btn-sm"><i class="fas fa-caret-left"></i> Kembali</a>
+                            <a href="{{ route('pelanggan.index') }}" class="btn btn-info btn-sm"><i
+                                    class="fas fa-caret-left"></i> Kembali</a>
                         </div>
                     </div>
 
@@ -87,7 +88,6 @@
                                 <div class="form-row">
 
                                     <x-adminlte-select2 name="id_promo" label="Promo" fgroup-class="col-md-6" required>
-                                        <option value="" selected>Pilih Promo</option>
                                         @foreach ($daftarPromo as $item)
                                             <option value="{{ $item->id }}">
                                                 {{ $item->kode_promo . ' - ' . $item->nama_promo }}</option>
@@ -98,7 +98,7 @@
                                         fgroup-class="col-md-2" value="{{ now()->format('Y-m-d') }}" required />
 
                                     <x-adminlte-input type="number" name="berlaku_bulan" label="Berlaku Bulan"
-                                        fgroup-class="col-md-2" value="{{ old('berlaku_bulan') }}" />
+                                        fgroup-class="col-md-1" value="{{ old('berlaku_bulan') }}" />
 
                                 </div>
                             </div>

@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string('password_pppoe');
             $table->boolean('is_active')->default(1);
             $table->boolean('aktivasi_layanan')->default(0);
+            $table->datetime('tanggal_aktivasi')->nullable();
             $table->timestamps();
         });
     }
