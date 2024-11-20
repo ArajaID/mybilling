@@ -31,5 +31,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/pemasukan', [PemasukanController::class, 'index'])->name('pemasukan.index');
     Route::get('/pemasukan-tambah', [PemasukanController::class, 'create'])->name('pemasukan.create');
+    Route::post('/pemasukan', [PemasukanController::class, 'store'])->name('pemasukan.store');
+
     Route::get('/pengeluaran', [PengeluaranController::class, 'create'])->name('pengeluaran.create');
 });

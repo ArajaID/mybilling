@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('tb_transaksi', function (Blueprint $table) {
             $table->id();
             $table->enum('jenis_transaksi', ['Pemasukan', 'Pengeluaran']);
-            $table->string('sumber');
+            $table->string('sumber')->nullable();
             $table->decimal('debit', 10, 2)->nullable();
             $table->decimal('kredit', 10, 2)->nullable();
             $table->string('kategori')->nullable();
             $table->string('metode_pembayaran')->nullable();
+            $table->text('deskripsi')->nullable();
+            $table->string('lampiran')->nullable();
             $table->timestamps();
         });
     }

@@ -18,4 +18,22 @@ class PemasukanController extends Controller
     public function create() {
         return view('pemasukan.create');
     }
+
+    public function store(Request $request) {
+
+        $validateData = $request->validate([
+            'debit'             => 'required',
+            'kategori'          => 'required',
+            'metode_pembayaran' => 'nullable',
+            'deskripsi'         => 'nullable',
+        ]);
+
+        $validateData['jenis_transaksi'] = 'Pemasukan';
+        $validateData['debit'] = $request->debit;
+
+        Transaksi::create($validateData);
+
+        toast('Transaksi berhasil ditambah!','success');
+        return redirect()->route('pemasukan.index');
+    }
 }

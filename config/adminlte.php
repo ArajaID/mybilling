@@ -351,16 +351,18 @@ return [
             'active'    => ['tagihan', 'tagihan', 'tagihan*', 'regex:@^tagihan/[0-9]+$@']
         ],
         [
-            'text' => 'Transaksi',
-            'icon' => 'fas fa-fw fa-wallet',
+            'text'    => 'Transaksi',
+            'icon'    => 'fas fa-fw fa-wallet',
             'submenu' => [
                 [
-                    'text' => 'Pemasukan',
-                    'url' => 'pemasukan',
+                    'text'      => 'Pemasukan',
+                    'url'       => 'pemasukan',
+                    'active'    => ['pemasukan', 'pemasukan', 'pemasukan*', 'regex:@^pemasukan/[0-9]+$@']
                 ],
                 [
-                    'text' => 'Pengeluaran',
-                    'url' => 'pengeluaran',
+                    'text'      => 'Pengeluaran',
+                    'url'       => 'pengeluaran',
+                    'active'    => ['pengeluaran', 'pengeluaran', 'pengeluaran*', 'regex:@^pengeluaran/[0-9]+$@']
                 ],
             ],
         ],
