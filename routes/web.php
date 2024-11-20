@@ -33,5 +33,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/pemasukan-tambah', [PemasukanController::class, 'create'])->name('pemasukan.create');
     Route::post('/pemasukan', [PemasukanController::class, 'store'])->name('pemasukan.store');
 
-    Route::get('/pengeluaran', [PengeluaranController::class, 'create'])->name('pengeluaran.create');
+    Route::get('/pengeluaran', [PengeluaranController::class, 'index'])->name('pengeluaran.index');
+    Route::get('/pengeluaran-tambah', [PengeluaranController::class, 'create'])->name('pengeluaran.create');
+    Route::post('/pengeluaran', [PengeluaranController::class, 'store'])->name('pengeluaran.store');
 });
