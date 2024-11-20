@@ -22,7 +22,7 @@
                                 value="{{ old('jumlah', $tagihan->jumlah_tagihan) }}" />
                             <x-adminlte-select name="metode_pembayaran" label="Metode Pembayaran" fgroup-class="col-md-2">
                                 <option value="0">Pilih Metode Pembayaran</option>
-                                <option value="QRIS">QRIS</option>
+                                <option value="QRIS" selected>QRIS</option>
                                 <option value="Cash">Cash</option>
                             </x-adminlte-select>
                         </div>

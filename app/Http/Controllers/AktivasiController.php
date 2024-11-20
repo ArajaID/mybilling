@@ -17,7 +17,7 @@ class AktivasiController extends Controller
         $kodePelanggan = request()->kode_pelanggan;
 
         $queryPelanggan = Pelanggan::where('kode_pelanggan', $kodePelanggan)->where('is_active', 1)->where('aktivasi_layanan', 0)->first();
-        $daftarPromo = Promo::where('status_promo', 1)->get();
+        $daftarPromo = Promo::where('status_promo', 1)->where('tanggal_berakhir', '>', now())->get();
 
         if($queryPelanggan) {
             return view('aktivasi.create', [
@@ -53,8 +53,6 @@ class AktivasiController extends Controller
             }
             // Promo Upgrade Speed
 
-            $comment = $dataPelanggan->kode_pelanggan . ' | ' . $dataPelanggan->nama_pelanggan;
-
             $dataPelanggan->update([
                 'aktivasi_layanan' => 1,
                 'tanggal_aktivasi' => $request->tanggal_klaim
@@ -76,8 +74,7 @@ class AktivasiController extends Controller
                     ->equal('password', $dataPelanggan->password_pppoe)
                     ->equal('service', 'pppoe')
                     ->equal('profile', $dataPelanggan->paket->bandwidth)
-                    ->equal('local-address', '172.16.10.1')
-                    ->equal('comment', $comment);
+                    ->equal('comment', 'LUNAS');
 
             // Send query and read response from RouterOS (ordinary answer from update/create/delete queries has empty body)
             $client->query($query)->read();
@@ -89,7 +86,7 @@ class AktivasiController extends Controller
                 'id_pelanggan'      => $idPelanggan,
                 'tanggal_tagihan'   => now(),
                 'jumlah_tagihan'    => $tagihanDiskon,
-                'status_pembayaran' => 'Belum Lunas',
+                'status_pembayaran' => 'BELUM-LUNAS',
                 'deskripsi'         => 'Biaya Pasang Baru'
             ]);
         });

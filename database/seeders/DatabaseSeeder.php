@@ -43,7 +43,8 @@ class DatabaseSeeder extends Seeder
 
         Promo::create([
             'kode_promo' => 0,
-            'nama_promo' => 'Tanpa Promo'
+            'nama_promo' => 'Tanpa Promo',
+            'tanggal_berakhir' => '2999/01/01'
         ]);
     }
 }

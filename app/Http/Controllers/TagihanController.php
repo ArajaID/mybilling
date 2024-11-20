@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use RouterOS\Query;
+use RouterOS\Client;
 use App\Models\Tagihan;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
@@ -27,13 +29,31 @@ class TagihanController extends Controller
     public function store(Request $request) {
         $dataTagihan = Tagihan::where('kode_tagihan', $request->kode_tagihan)->first();
 
+        $bulanTagihan = 'Tagihan ' . date('M') . '-' . date('Y');
+
         $dataTagihan->update([
-            'status_pembayaran' => 'Lunas'
+            'status_pembayaran' => 'LUNAS'
         ]);
 
         $request->validate([
             'jumlah'    => 'required',
         ]);
+
+        if($dataTagihan->deskripsi == $bulanTagihan) {
+            $client = new Client(config('mikrotik.credential'));
+
+            $query = new Query('/ppp/secret/print');
+            $query->where('name', $dataTagihan->pelanggan->user_pppoe);
+            $secrets = $client->query($query)->read();
+
+            foreach ($secrets as $secret) {
+                $query = (new Query('/ppp/secret/set'))
+                        ->equal('.id', $secret['.id'])
+                        ->equal('comment', 'LUNAS');
+                
+                $client->query($query)->read();
+            }
+        }
 
         Transaksi::create([
             'jenis_transaksi'   => 'Pemasukan',
