@@ -2,17 +2,20 @@
 
 namespace App\Jobs;
 
-use Carbon\Carbon;
 use RouterOS\Query;
 use RouterOS\Client;
 use App\Models\Tagihan;
 use App\Models\Pelanggan;
+use Silvanix\Wablas\Message;
+use App\Helpers\FinanceHelper;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class GenerateTagihan implements ShouldQueue
 {
-    use Queueable;
+    use InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * Create a new job instance.
@@ -33,17 +36,45 @@ class GenerateTagihan implements ShouldQueue
 
         foreach ($dataPelanggan as $pelanggan) {
             $kodeTagihan = 'INV-' . date('y') . date('m') . date('d') . mt_rand(1000, 9999);
+           
+            $startDate = $pelanggan->tanggal_aktivasi;
+            $monthlyFee = $pelanggan->paket->harga;
+            $periodeBulan = now()->startOfMonth()->format('Y-m-d');
+            $excludedDescription = "Biaya Pasang Baru";
 
-            $tagihan = new Tagihan;
-            $tagihan->kode_tagihan      = $kodeTagihan;
-            $tagihan->id_pelanggan      = $pelanggan->id;
-            $tagihan->tanggal_tagihan   = now();
-            $tagihan->jumlah_tagihan    = $this->hitungJumlahTagihan($pelanggan);
-            $tagihan->status_pembayaran = 'BELUM-LUNAS';
-            $tagihan->deskripsi         = $desc;
-            $tagihan->save();
+            // Cek apakah tagihan sudah ada untuk periode ini
+            if (FinanceHelper::tagihanExists($pelanggan->id, $periodeBulan, $excludedDescription)) {
+                continue; // Lewati jika sudah ada tagihan
+            }
+
+            $jumlahTagihan = FinanceHelper::calculateTagihan($startDate, $monthlyFee);
+
+            // Simpan tagihan
+            Tagihan::create([
+                'kode_tagihan'      => $kodeTagihan,
+                'id_pelanggan'      => $pelanggan->id,
+                'tanggal_tagihan'   => $startDate,
+                'periode_bulan'     => now()->startOfMonth()->format('Y-m-d'),
+                'status_pembayaran' => 'BELUM-LUNAS',
+                'deskripsi'         => $desc,
+                'start_date'        => $startDate,
+                'jumlah_tagihan'    => $jumlahTagihan,
+            ]);
+
+             // Perintah mengirim pemberitahuan ke WA pelanggan
+
+            $send = new Message();
+
+            $tagihanRupiah = number_format($jumlahTagihan,  2, ",", ".");
+
+            $phones     = $pelanggan->no_telepon;
+            $message    = 'Pelanggan, *' . $pelanggan->nama_pelanggan . '* tagihan internet anda Rp. ' . $tagihanRupiah . '. Mohon lakukan pembayaran melalui QRIS agar layanan tetap aktif.';
+       
+            $send->single_text($phones,$message);
+
         }
 
+        // Perintah update Comment di MikroTik
         $client = new Client(config('mikrotik.credential'));
 
         $query = new Query('/ppp/secret/print');
@@ -56,33 +87,6 @@ class GenerateTagihan implements ShouldQueue
                 ->equal('comment', 'BELUM-LUNAS');
         
             $client->query($query)->read();
-        }
-    }
-
-    private function hitungJumlahTagihan($pelanggan)
-    {
-        $startDate = Carbon::parse($pelanggan->tanggal_aktivasi);
-
-        // Tanggal jatuh tempo setiap tanggal 20
-        $dueDate = Carbon::create($startDate->year, $startDate->month, 20);
-
-        if ($startDate->gt($dueDate)) {
-            $dueDate->addMonth();
-        }
-
-         // Total hari dalam bulan
-        $daysInMonth = $startDate->daysInMonth;
-
-        // Hitung jumlah hari yang terpakai
-        $daysUsed = $startDate->diffInDays($dueDate);
-
-        // Hitung biaya prorata
-        $proratedFee = ($daysUsed / $daysInMonth) * $pelanggan->paket->harga;
-
-        $totalTagihan = $pelanggan->paket->harga + round($proratedFee, 2);
-
-        // Logika untuk menghitung jumlah tagihan
-        // Misalnya, berdasarkan paket pelanggan
-        return $totalTagihan;
+        } 
     }
 }

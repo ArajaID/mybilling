@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('kode_tagihan')->unique();
             $table->unsignedBigInteger('id_pelanggan')->nullable();
             $table->datetime('tanggal_tagihan');
-            $table->datetime('tanggal_jatuh_tempo')->nullable();
+            $table->datetime('periode_bulan');
             $table->decimal('jumlah_tagihan', 10, 2);
             $table->enum('status_pembayaran', ['BELUM-LUNAS', 'LUNAS']);
             $table->text('deskripsi')->nullable();

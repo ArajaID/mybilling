@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "42cb2bdf20e2bc2efdf3f3b229c4fbbb",
+    "content-hash": "4d9e8cc2e45acb3463b076c6efa0e260",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -3455,6 +3455,37 @@
                 }
             ],
             "time": "2024-06-15T16:17:23+00:00"
+        },
+        {
+            "name": "silvanix/wablas",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/silvanixdev/plugin-wablas.git",
+                "reference": "66605a7a59aed63a99593220d426c9ea2653e9bf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/silvanixdev/plugin-wablas/zipball/66605a7a59aed63a99593220d426c9ea2653e9bf",
+                "reference": "66605a7a59aed63a99593220d426c9ea2653e9bf",
+                "shasum": ""
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Silvanix\\Wablas\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Official Wablas Plugin",
+            "support": {
+                "issues": "https://github.com/silvanixdev/plugin-wablas/issues",
+                "source": "https://github.com/silvanixdev/plugin-wablas/tree/1.0.3"
+            },
+            "time": "2022-10-17T08:00:38+00:00"
         },
         {
             "name": "spatie/ssh",

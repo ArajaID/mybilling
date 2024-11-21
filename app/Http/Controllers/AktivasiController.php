@@ -86,6 +86,7 @@ class AktivasiController extends Controller
                 'id_pelanggan'      => $idPelanggan,
                 'tanggal_tagihan'   => now(),
                 'jumlah_tagihan'    => $tagihanDiskon,
+                'periode_bulan'     => now(),
                 'status_pembayaran' => 'BELUM-LUNAS',
                 'deskripsi'         => 'Biaya Pasang Baru'
             ]);
