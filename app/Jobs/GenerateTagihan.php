@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Carbon\Carbon;
 use RouterOS\Query;
 use RouterOS\Client;
 use App\Models\Tagihan;
@@ -37,7 +38,7 @@ class GenerateTagihan implements ShouldQueue
             $tagihan->kode_tagihan      = $kodeTagihan;
             $tagihan->id_pelanggan      = $pelanggan->id;
             $tagihan->tanggal_tagihan   = now();
-            $tagihan->jumlah_tagihan    = $pelanggan->paket->harga;
+            $tagihan->jumlah_tagihan    = $this->hitungJumlahTagihan($pelanggan);
             $tagihan->status_pembayaran = 'BELUM-LUNAS';
             $tagihan->deskripsi         = $desc;
             $tagihan->save();
@@ -56,5 +57,32 @@ class GenerateTagihan implements ShouldQueue
         
             $client->query($query)->read();
         }
+    }
+
+    private function hitungJumlahTagihan($pelanggan)
+    {
+        $startDate = Carbon::parse($pelanggan->tanggal_aktivasi);
+
+        // Tanggal jatuh tempo setiap tanggal 20
+        $dueDate = Carbon::create($startDate->year, $startDate->month, 20);
+
+        if ($startDate->gt($dueDate)) {
+            $dueDate->addMonth();
+        }
+
+         // Total hari dalam bulan
+        $daysInMonth = $startDate->daysInMonth;
+
+        // Hitung jumlah hari yang terpakai
+        $daysUsed = $startDate->diffInDays($dueDate);
+
+        // Hitung biaya prorata
+        $proratedFee = ($daysUsed / $daysInMonth) * $pelanggan->paket->harga;
+
+        $totalTagihan = $pelanggan->paket->harga + round($proratedFee, 2);
+
+        // Logika untuk menghitung jumlah tagihan
+        // Misalnya, berdasarkan paket pelanggan
+        return $totalTagihan;
     }
 }
