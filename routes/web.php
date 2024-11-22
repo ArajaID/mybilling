@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaketController;
 use App\Http\Controllers\PromoController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TagihanController;
 use App\Http\Controllers\AktivasiController;
 use App\Http\Controllers\PelangganController;
@@ -36,4 +37,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/pengeluaran', [PengeluaranController::class, 'index'])->name('pengeluaran.index');
     Route::get('/pengeluaran-tambah', [PengeluaranController::class, 'create'])->name('pengeluaran.create');
     Route::post('/pengeluaran', [PengeluaranController::class, 'store'])->name('pengeluaran.store');
+
+    Route::get('/report/arus-kas', [ReportController::class, 'arusKas'])->name('report.aruskas');
 });

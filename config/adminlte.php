@@ -372,12 +372,8 @@ return [
             'icon' => 'fas fa-fw fa-copy',
             'submenu' => [
                 [
-                    'text' => 'Pemasukan',
-                    'url' => '#',
-                ],
-                [
-                    'text' => 'Pengeluaran',
-                    'url' => '#',
+                    'text' => 'Keuangan',
+                    'url' => 'report/arus-kas',
                 ],
             ],
         ],
