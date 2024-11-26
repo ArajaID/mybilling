@@ -11,10 +11,10 @@ use App\Http\Controllers\PemasukanController;
 use App\Http\Controllers\PengeluaranController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('login');
 });
 
-Auth::routes();
+Auth::routes(['register' => false, 'verify' => true]);
 
 Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
