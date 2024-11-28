@@ -12,8 +12,23 @@
     </div>
 
     <div class="card">
-        <div class="p-0 card-body">
-            <table class="table table-striped">
+        <div class="card-header">
+            <h3 class="card-title">Daftar Pelanggan</h3>
+
+            <div class="card-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="text" name="table_search" class="float-right form-control" placeholder="Search">
+
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-default">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-0 card-body table-responsive" style="height: auto;">
+            <table class="table table-head-fixed text-nowrap">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -35,7 +50,8 @@
                                 ? '<badge class="badge badge-success">Sudah Diaktivasi</badge>'
                                 : '<badge class="badge badge-danger">Belum Diaktivasi</badge>' !!}</td>
                             <td>
-                                <a href="" class="btn btn-warning btn-sm"><i class="fas fa-eye"></i> Detail</a>
+                                <a href="{{ route('pelanggan.show', $data->id) }}" class="btn btn-warning btn-sm"><i
+                                        class="fas fa-eye"></i> Detail</a>
                                 <a href="{{ route('aktivasi.create') . '?kode_pelanggan=' . $data->kode_pelanggan }}"
                                     class="btn btn-info btn-sm {{ $data->aktivasi_layanan ? 'disabled' : '' }}"><i
                                         class="fas fa-key"></i> Aktivasi</a>
@@ -47,6 +63,12 @@
                     @endforeach
                 </tbody>
             </table>
+
+            <div class="clearfix card-footer">
+                <ul class="float-right m-0 pagination pagination-sm">
+                    {{ $pelanggan->links() }}
+                </ul>
+            </div>
         </div>
     </div>
 @stop

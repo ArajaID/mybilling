@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Paket;
+use App\Models\Tagihan;
 use App\Models\Pelanggan;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class PelangganController extends Controller
      */
     public function index()
     {
-        $dataPelanggan = Pelanggan::with('paket')->get();
+        $dataPelanggan = Pelanggan::with('paket')->paginate(3);
 
         return view('pelanggan.index', [
             'pelanggan' => $dataPelanggan
@@ -73,7 +74,13 @@ class PelangganController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $dataPelanggan = Pelanggan::findOrFail($id);
+        $historyTagihan = Tagihan::where('id_pelanggan', $id)->where('status_pembayaran', 'LUNAS')->paginate(10);
+
+        return view('pelanggan.show', [
+            'pelanggan' => $dataPelanggan,
+            'historyTagihan' => $historyTagihan
+        ]);
     }
 
     /**

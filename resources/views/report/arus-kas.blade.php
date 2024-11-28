@@ -56,8 +56,8 @@
 
                     </h3>
                 </div>
-                <div class="card-body">
-                    <table class="table table-bordered">
+                <div class="p-0 card-body table-responsive" style="height: auto;">
+                    <table class="table table-head-fixed text-nowrap">
                         <thead>
                             <tr>
                                 <th style="width: 10px">No</th>

@@ -14,11 +14,17 @@
                     @csrf
                     <div class="card-body">
 
-                        <input type="hidden" value="{{ $tagihan->deskripsi }}" name="deskripsi">
-                        <input type="hidden" value="{{ $tagihan->kode_tagihan }}" name="kode_tagihan">
-
                         <div class="row">
-                            <x-adminlte-input type="number" name="jumlah" label="Jumlah" fgroup-class="col-md-3"
+                            <x-adminlte-input name="kode_tagihan" label="No Tagihan" fgroup-class="col-md-2"
+                                value="{{ old('kode_tagihan', $tagihan->kode_tagihan) }}" readonly />
+
+                            <x-adminlte-input name="pelanggan" label="Pelanggan" fgroup-class="col-md-3"
+                                value="{{ $tagihan->pelanggan->nama_pelanggan }}" disabled />
+
+                            <x-adminlte-input name="deskripsi" label="Deskripsi" fgroup-class="col-md-3"
+                                value="{{ old('deskripsi', $tagihan->deskripsi) }}" readonly />
+
+                            <x-adminlte-input type="number" name="jumlah" label="Jumlah" fgroup-class="col-md-2"
                                 value="{{ old('jumlah', $tagihan->jumlah_tagihan) }}" />
                             <x-adminlte-select name="metode_pembayaran" label="Metode Pembayaran" fgroup-class="col-md-2">
                                 <option value="0">Pilih Metode Pembayaran</option>

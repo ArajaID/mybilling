@@ -12,8 +12,8 @@
     </div>
 
     <div class="card">
-        <div class="p-0 card-body">
-            <table class="table table-striped">
+        <div class="p-0 card-body table-responsive" style="height: auto;">
+            <table class="table table-head-fixed text-nowrap">
                 <thead>
                     <tr>
                         <th>No</th>
