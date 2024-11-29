@@ -20,8 +20,12 @@ return new class extends Migration
             $table->string('blok')->nullable();
             $table->string('rt')->nullable();
             $table->enum('area', ['perumahan', 'diluar_perumahan'])->nullable();
-            $table->string('odc_odp')->nullable();
+            $table->unsignedBigInteger('odp_id')->nullable();
             $table->unsignedBigInteger('id_paket')->nullable();
+
+            $table->foreign('odp_id')
+            ->references('id')->on('tb_odp')
+            ->onDelete('cascade');
 
             $table->foreign('id_paket')
                 ->references('id')->on('tb_paket')

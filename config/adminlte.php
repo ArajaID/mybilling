@@ -321,6 +321,22 @@ return [
             'active'    => ['paket', 'paket', 'paket*', 'regex:@^paket/[0-9]+$@']
         ],
         [
+            'text'    => 'ODC dan ODP',
+            'icon'    => 'fas fa-fw fa-boxes',
+            'submenu' => [
+                [
+                    'text'      => 'ODC',
+                    'url'       => 'odc',
+                    'active'    => ['odc', 'odc', 'odc*', 'regex:@^odc/[0-9]+$@']
+                ],
+                [
+                    'text'      => 'ODP',
+                    'url'       => 'odp',
+                    'active'    => ['odp', 'odp', 'odp*', 'regex:@^odp/[0-9]+$@']
+                ],
+            ],
+        ],
+        [
             'text'      => 'Pelanggan',
             'url'       => 'pelanggan',
             'icon'      => 'fas fa-fw fa-users',
@@ -333,13 +349,18 @@ return [
             'active'    => ['promo', 'promo', 'promo*', 'regex:@^promo/[0-9]+$@']
         ],
         [
-            'header' => 'AKTIVASI LAYANAN',
+            'header' => 'LAYANAN',
         ],
         [
-            'text'      => 'Layanan',
+            'text'      => 'Aktivasi Layanan',
             'url'       => 'aktivasi-layanan',
             'icon'      => 'fas fa-fw fa-key',
             'active'    => ['aktivasi-layanan', 'aktivasi-layanan', 'aktivasi-layanan*', 'regex:@^aktivasi-layanan/[0-9]+$@']
+        ],
+        [
+            'text'      => 'Pelanggan Online',
+            'url'       => 'online-pelanggan',
+            'icon'      => 'fas fa-fw fa-signal',
         ],
         [
             'header' => 'KEUANGAN',

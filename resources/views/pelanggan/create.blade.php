@@ -38,8 +38,21 @@
                                 <option value="perumahan">Perumahan</option>
                                 <option value="diluar_perumahan">Diluar Perumahan</option>
                             </x-adminlte-select>
-                            <x-adminlte-input name="odc_odp" label="Alamat ODC dan ODP" fgroup-class="col-md-3"
-                                value="{{ old('odc_odp') }}" />
+
+                            {{-- <x-adminlte-input name="odc_odp" label="Alamat ODC dan ODP" fgroup-class="col-md-3"
+                                value="{{ old('odc_odp') }}" /> --}}
+
+                            <x-adminlte-select name="odc_id" label="ODC" id="odcId" fgroup-class="col-md-3">
+                                <option value="">Pilih ODC</option>
+                                @foreach ($dataODC as $item)
+                                    <option value="{{ $item->id }}">{{ $item->odc }}</option>
+                                @endforeach
+                            </x-adminlte-select>
+
+                            <x-adminlte-select name="odp_id" label="ODP" id="odpId" fgroup-class="col-md-3">
+                                <option value="">Pilih ODP</option>
+                            </x-adminlte-select>
+
                             <x-adminlte-select name="id_paket" label="Paket Internet" fgroup-class="col-md-3">
                                 <option value="">Pilih Paket</option>
                                 @foreach ($paketInet as $item)
@@ -57,4 +70,33 @@
             </div>
         </div>
     </div>
+@stop
+
+@section('js')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#odcId').change(function() {
+                let odc = $(this).val();
+                if (odc) {
+                    $.ajax({
+                        url: '/get-odp/' + odc,
+                        type: 'GET',
+                        success: function(data) {
+                            $('#odpId').empty();
+                            $('#odpId').append('<option value="">Pilih ODP</option>');
+                            $.each(data, function(key, value) {
+                                $('#odpId').append('<option value="' + value.id +
+                                    '">' + value.odp + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#odpId').empty();
+                    $('#odpId').append('<option value="">Pilih ODP</option>');
+                }
+            });
+        });
+    </script>
 @stop

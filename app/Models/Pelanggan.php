@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Paket;
 use App\Models\Promo;
+use App\Models\DataODP;
 use App\Models\Tagihan;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,6 +24,11 @@ class Pelanggan extends Model
     public function paket()
     {
         return $this->belongsTo(Paket::class, 'id_paket');
+    }
+
+    public function odpData()
+    {
+        return $this->belongsTo(DataODP::class, 'odp_id');
     }
 
     public function tagihan()

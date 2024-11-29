@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Paket;
+use App\Models\DataODC;
+use App\Models\DataODP;
 use App\Models\Tagihan;
 use App\Models\Pelanggan;
 use Illuminate\Support\Str;
@@ -29,10 +31,12 @@ class PelangganController extends Controller
     {
         $randomKodePelanggan = mt_rand(100000, 999999);
         $paketInternet = Paket::all();
+        $dataODC = DataODC::all();
 
         return view('pelanggan.create', [
             'kodePelanggan' => $randomKodePelanggan,
-            'paketInet' => $paketInternet
+            'paketInet' => $paketInternet,
+            'dataODC' => $dataODC
         ]);
     }
 
@@ -49,7 +53,7 @@ class PelangganController extends Controller
             'blok'              => 'nullable',
             'rt'                => 'nullable',
             'area'              => 'required',
-            'odc_odp'           => 'required',
+            'odp_id'           => 'required',
             'id_paket'          => 'required',
         ]);
 
@@ -105,5 +109,11 @@ class PelangganController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getODP($odc_id)
+    {
+        $dataODP = DataODP::where('odc_id', $odc_id)->get();
+        return response()->json($dataODP);
     }
 }

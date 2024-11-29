@@ -43,7 +43,7 @@
                     <hr>
 
                     <strong><i class="mr-1 fas fa-map-marker-alt"></i> Alamat ODC dan ODP</strong>
-                    <p class="text-muted">{{ $pelanggan->odc_odp }}</p>
+                    <p class="text-muted">{{ $pelanggan->odpData->odp }}</p>
 
                     <hr>
 

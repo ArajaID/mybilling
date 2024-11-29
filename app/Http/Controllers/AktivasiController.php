@@ -102,4 +102,17 @@ class AktivasiController extends Controller
         toast('Aktivasi berhasil!','success');
             return redirect()->route('pelanggan.index');
     }
+
+    public function pelangganOnline() {
+        $client = new Client(config('mikrotik.credential'));
+
+        $queryPPPActive = (new Query('/ppp/active/print'));
+    
+        $pppActive = $client->query($queryPPPActive)->read();
+
+        return view('aktivasi.pelanggan-online', [
+            'totalOnline' => count($pppActive),
+            'pppActive' => $pppActive
+        ]);
+    }
 }

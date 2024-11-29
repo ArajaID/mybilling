@@ -10,59 +10,69 @@
     <div class="main">
 
         <div class="row">
+
             <div class="col-lg-3 col-6">
                 <!-- small box -->
-                <div class="small-box bg-info">
-                    <div class="inner">
-                        <h3>{{ $pppActive }} Online</h3>
+                <a href="{{ route('pelanggan-online') }}">
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>{{ $pppActive }} Online</h3>
 
-                        <p>Pelanggan Online</p>
+                            <p>Pelanggan Online</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-person-stalker"></i>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-person-stalker"></i>
+                </a>
+            </div>
+
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <a href="{{ route('pelanggan.index') }}">
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3>{{ $totalPelanggan }}</h3>
+                            <p>Total Pelanggan</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-person-add"></i>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <!-- ./col -->
             <div class="col-lg-3 col-6">
                 <!-- small box -->
-                <div class="small-box bg-success">
-                    <div class="inner">
-                        <h3>{{ $totalPelanggan }}</h3>
-                        <p>Total Pelanggan</p>
+                <a href="{{ route('tagihan.index') }}">
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>{{ $tagihanActive }} Tagihan</h3>
+
+                            <p>Belum Lunas</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-card"></i>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-person-add"></i>
-                    </div>
-                </div>
+                </a>
             </div>
             <!-- ./col -->
             <div class="col-lg-3 col-6">
                 <!-- small box -->
-                <div class="small-box bg-warning">
-                    <div class="inner">
-                        <h3>{{ $tagihanActive }} Tagihan</h3>
+                <a href="{{ route('paket.index') }}">
+                    <div class="small-box bg-danger">
+                        <div class="inner">
+                            <h3>{{ $paketActive }} Paket Internet</h3>
 
-                        <p>Belum Lunas</p>
+                            <p>Aktif</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-wifi"></i>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-card"></i>
-                    </div>
-                </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-danger">
-                    <div class="inner">
-                        <h3>{{ $paketActive }} Paket Internet</h3>
-
-                        <p>Aktif</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-wifi"></i>
-                    </div>
-                </div>
+                </a>
             </div>
             <!-- ./col -->
         </div>
