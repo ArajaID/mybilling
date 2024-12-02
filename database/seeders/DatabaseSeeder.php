@@ -18,27 +18,21 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Jamil',
-            'email' => 'sa@demo.com',
+            'name' => 'Abdul Rahman Jamil',
+            'email' => 'jamil@aionios.net',
             'password' => bcrypt('password'),
         ]);
 
-        Paket::create([
-            'nama_paket' => 'Paket Upto 5',
-            'harga' => 110000,
-            'bandwidth' => "bw5",
+        User::factory()->create([
+            'name' => 'Haikal',
+            'email' => 'haikal@aionios.net',
+            'password' => bcrypt('password'),
         ]);
 
-        Paket::create([
-            'nama_paket' => 'Paket Upto 10',
-            'harga' => 180000,
-            'bandwidth' => "bw10",
-        ]);
-
-        Paket::create([
-            'nama_paket' => 'Paket Upto 20',
-            'harga' => 230000,
-            'bandwidth' => "bw20",
+        User::factory()->create([
+            'name' => 'Fachrie',
+            'email' => 'fachrie@aionios.net',
+            'password' => bcrypt('password'),
         ]);
 
         Promo::create([

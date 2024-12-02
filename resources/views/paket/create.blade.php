@@ -22,7 +22,7 @@
                             <x-adminlte-select name="bandwidth" label="Bandwidth" fgroup-class="col-md-3">
                                 <option value="0">Pilih Bandwidth</option>
                                 @foreach ($ppp as $item)
-                                    @if ($item['name'] != 'default' && $item['name'] != 'default-encryption')
+                                    @if ($item['name'] != 'default' && $item['name'] != 'default-encryption' && $item['name'] != 'pelanggan-terisolir')
                                         <option value="{{ $item['name'] }}">{{ $item['name'] }}</option>
                                     @endif
                                 @endforeach

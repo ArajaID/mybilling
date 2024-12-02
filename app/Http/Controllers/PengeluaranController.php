@@ -23,6 +23,7 @@ class PengeluaranController extends Controller
 
         $validateData = $request->validate([
             'kredit'            => 'required',
+            'tanggal'           => 'required',
             'kategori'          => 'required',
             'metode_pembayaran' => 'nullable',
             'deskripsi'         => 'nullable',

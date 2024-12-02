@@ -23,6 +23,7 @@ class PemasukanController extends Controller
 
         $validateData = $request->validate([
             'debit'             => 'required',
+            'tanggal'           => 'required',
             'kategori'          => 'required',
             'metode_pembayaran' => 'nullable',
             'deskripsi'         => 'nullable',

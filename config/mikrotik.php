@@ -5,6 +5,6 @@ return [
         'host' => env('MIKROTIK_HOST'),
         'user' => env('MIKROTIK_USER'),
         'pass' => env('MIKROTIK_PASS'),
-        'port' => 8728,
+        'port' => 8087,
     ],
 ];

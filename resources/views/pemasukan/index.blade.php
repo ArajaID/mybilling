@@ -17,6 +17,7 @@
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>Tanggal</th>
                         <th>Sumber</th>
                         <th>Kategori</th>
                         <th>Metode Pembayaran</th>
@@ -27,6 +28,7 @@
                     @foreach ($pemasukan as $data)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
+                            <td>{{ \Carbon\Carbon::parse($data->tanggal)->format('d-m-Y') }}</td>
                             <td>{{ $data->sumber }}</td>
                             <td>{{ $data->kategori }}</td>
                             <td>{{ $data->metode_pembayaran }}</td>

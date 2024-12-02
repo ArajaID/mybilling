@@ -15,6 +15,9 @@
                     <div class="card-body">
 
                         <div class="row">
+                            <x-adminlte-input type="date" name="tanggal" label="Tanggal Pemasukan" fgroup-class="col-md-2"
+                                value="{{ now()->format('Y-m-d') }}" />
+
                             <x-adminlte-input type="number" name="debit" label="Jumlah" fgroup-class="col-md-2"
                                 value="{{ old('debit') }}" />
                             <x-adminlte-input name="kategori" label="Kategori" fgroup-class="col-md-2"
@@ -24,7 +27,7 @@
                                 <option value="QRIS">QRIS</option>
                                 <option value="Cash">Cash</option>
                             </x-adminlte-select>
-                            <x-adminlte-textarea name="deskripsi" label="Deskripsi" fgroup-class="col-md-6" />
+                            <x-adminlte-textarea name="deskripsi" label="Deskripsi" fgroup-class="col-md-4" />
                         </div>
 
                     </div>

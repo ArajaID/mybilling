@@ -18,14 +18,18 @@
                             <x-adminlte-input name="kode_tagihan" label="No Tagihan" fgroup-class="col-md-2"
                                 value="{{ old('kode_tagihan', $tagihan->kode_tagihan) }}" readonly />
 
-                            <x-adminlte-input name="pelanggan" label="Pelanggan" fgroup-class="col-md-3"
+                            <x-adminlte-input name="pelanggan" label="Pelanggan" fgroup-class="col-md-2"
                                 value="{{ $tagihan->pelanggan->nama_pelanggan }}" disabled />
 
-                            <x-adminlte-input name="deskripsi" label="Deskripsi" fgroup-class="col-md-3"
+                            <x-adminlte-input name="deskripsi" label="Deskripsi" fgroup-class="col-md-2"
                                 value="{{ old('deskripsi', $tagihan->deskripsi) }}" readonly />
+
+                            <x-adminlte-input type="date" name="tanggal" label="Tanggal Penerimaan"
+                                fgroup-class="col-md-2" value="{{ now()->format('Y-m-d') }}" />
 
                             <x-adminlte-input type="number" name="jumlah" label="Jumlah" fgroup-class="col-md-2"
                                 value="{{ old('jumlah', $tagihan->jumlah_tagihan) }}" />
+
                             <x-adminlte-select name="metode_pembayaran" label="Metode Pembayaran" fgroup-class="col-md-2">
                                 <option value="0">Pilih Metode Pembayaran</option>
                                 <option value="QRIS" selected>QRIS</option>

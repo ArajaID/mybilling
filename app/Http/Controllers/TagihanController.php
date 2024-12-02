@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class TagihanController extends Controller
 {
     public function index() {
-        $dataTagihan = Tagihan::with('pelanggan')->get();
+        $dataTagihan = Tagihan::with('pelanggan')->where('status_pembayaran', 'BELUM-LUNAS')->get();
         
         return view('tagihan.index', [
             'tagihan' => $dataTagihan
@@ -57,6 +57,7 @@ class TagihanController extends Controller
 
         Transaksi::create([
             'jenis_transaksi'   => 'Pemasukan',
+            'tanggal'           => $request->tanggal,
             'sumber'            => $request->kode_tagihan,
             'debit'             => $request->jumlah,
             'kategori'          => $request->deskripsi,

@@ -64,9 +64,9 @@
                 <a href="{{ route('paket.index') }}">
                     <div class="small-box bg-danger">
                         <div class="inner">
-                            <h3>{{ $paketActive }} Paket Internet</h3>
+                            <h3>{{ $paketActive }} Paket</h3>
 
-                            <p>Aktif</p>
+                            <p>Internet Aktif</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-wifi"></i>

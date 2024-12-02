@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tb_transaksi', function (Blueprint $table) {
             $table->id();
             $table->enum('jenis_transaksi', ['Pemasukan', 'Pengeluaran']);
+            $table->date('tanggal');
             $table->string('sumber')->nullable();
             $table->decimal('debit', 10, 2)->nullable();
             $table->decimal('kredit', 10, 2)->nullable();
