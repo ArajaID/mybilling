@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Paket;
 use App\Models\Promo;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ class PromoController extends Controller
      */
     public function index()
     {
-        $promo = Promo::all();
+        $promo = Promo::where('kode_promo', '!=', 0)->get();
 
         return view('promo.index', [
             'dataPromo' => $promo
@@ -26,9 +27,11 @@ class PromoController extends Controller
     public function create()
     {
         $kodePromo = Str::random(10);
-        
+        $paket = Paket::all();
+
         return view('promo.create', [
-            'kodePromo' => $kodePromo
+            'kodePromo' => $kodePromo,
+            'paket' => $paket
         ]);
     }
     /**

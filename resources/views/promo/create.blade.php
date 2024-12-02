@@ -22,7 +22,9 @@
 
                             <x-adminlte-select name="tambahan_speed" label="Upgrade Speed" fgroup-class="col-md-2">
                                 <option value="">Pilih Speed</option>
-
+                                @foreach ($paket as $item)
+                                    <option value="{{ $item->id }}">{{ $item->nama_paket }}</option>
+                                @endforeach
                             </x-adminlte-select>
 
                             <x-adminlte-input type="date" name="tanggal_mulai" label="Tanggal Mulai"

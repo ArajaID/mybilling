@@ -79,7 +79,7 @@ class PelangganController extends Controller
     public function show(string $id)
     {
         $dataPelanggan = Pelanggan::findOrFail($id);
-        $historyTagihan = Tagihan::where('id_pelanggan', $id)->where('status_pembayaran', 'LUNAS')->paginate(10);
+        $historyTagihan = Tagihan::where('id_pelanggan', $id)->paginate(10);
 
         return view('pelanggan.show', [
             'pelanggan' => $dataPelanggan,

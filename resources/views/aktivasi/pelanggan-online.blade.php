@@ -36,13 +36,17 @@
                 </thead>
                 <tbody>
                     @foreach ($pppActive as $data)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $data['name'] }}</td>
-                            <td>{{ $data['caller-id'] }}</td>
-                            <td>{{ $data['address'] }}</td>
-                            <td>{{ $data['uptime'] }}</td>
-                        </tr>
+                        @foreach ($pelanggan as $item)
+                            @if ($data['name'] == $item->user_pppoe)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $data['name'] }}</td>
+                                    <td>{{ $data['caller-id'] }}</td>
+                                    <td>{{ $data['address'] }}</td>
+                                    <td>{{ $data['uptime'] }}</td>
+                                </tr>
+                            @endif
+                        @endforeach
                     @endforeach
                 </tbody>
             </table>

@@ -76,6 +76,7 @@
                                         <th>Tanggal Tagihan</th>
                                         <th>Total</th>
                                         <th>Deskripsi</th>
+                                        <th>Status Pembayaran</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -86,6 +87,10 @@
                                             <td>{{ \Carbon\Carbon::parse($data->tanggal_tagihan)->format('d-m-Y') }}</td>
                                             <td>@currency($data->jumlah_tagihan)</td>
                                             <td>{{ $data->deskripsi }}</td>
+                                            <td>{!! $data->status_pembayaran == 'LUNAS'
+                                                ? "<span class='badge badge-success'>Lunas</span>"
+                                                : "<span class='badge badge-danger'>Belum Lunas</span>" !!}
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>

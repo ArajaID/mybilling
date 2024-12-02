@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use RouterOS\Query;
 use RouterOS\Client;
+use App\Models\Paket;
 use App\Models\Promo;
 use App\Models\Tagihan;
 use App\Models\Pelanggan;
@@ -39,8 +41,12 @@ class AktivasiController extends Controller
 
     public function store(Request $request) {
         DB::transaction(function () use ($request) {
+            // inisialisasi id pelanggan dan tanggal klaim
             $idPelanggan = $request->id_pelanggan;
+            $klaimTgl    = $request->tanggal_klaim;
+            // data pelanggan
             $dataPelanggan = Pelanggan::findOrFail($idPelanggan);
+            // cari data promo berdasarkan id promo
             $promo = Promo::findOrFail($request->id_promo);
 
             // Promo Diskon Biaya Pemasangan
@@ -51,20 +57,37 @@ class AktivasiController extends Controller
             } else {
                 $tagihanDiskon = $biayaPemasangan;
             }
+            
             // Promo Upgrade Speed
+            if($promo->tambahan_speed) {
+                $dataPaket = Paket::findOrFail($promo->tambahan_speed);
+                $bwPromo = $dataPaket->bandwidth;
+            } else {
+                $bwPromo = $dataPelanggan->paket->bandwidth;
+            }
 
+            // update data pelanggan filed aktivasi layanan
             $dataPelanggan->update([
                 'aktivasi_layanan' => 1,
-                'tanggal_aktivasi' => $request->tanggal_klaim
+                'tanggal_aktivasi' => $klaimTgl
             ]);
 
+            // logika untuk berlaku bulan upgrade speed
+            $intBeralkuBulan = (int)$request->berlaku_bulan;
+
+            $tanggalBerakhir = Carbon::parse($klaimTgl)->addMonths($intBeralkuBulan)->format('Y-m-d');
+            
+            // create data promo pelanggan
             PromoPelanggan::create([
                 'id_pelanggan'  => $idPelanggan,
                 'id_promo'      => $request->id_promo,
-                'tanggal_klaim' => $request->tanggal_klaim,
-                'berlaku_bulan' => $request->berlaku_bulan
+                'tanggal_klaim' => $klaimTgl,
+                'berlaku_bulan' => $request->berlaku_bulan,
+                'tanggal_berakhir_promo' => $tanggalBerakhir
             ]);
 
+
+            // membuat user secret di mikrotik
             $client = new Client(config('mikrotik.credential'));
 
             // Send "equal" query with details about IP address which should be created
@@ -73,7 +96,7 @@ class AktivasiController extends Controller
                     ->equal('name', $dataPelanggan->user_pppoe)
                     ->equal('password', $dataPelanggan->password_pppoe)
                     ->equal('service', 'pppoe')
-                    ->equal('profile', $dataPelanggan->paket->bandwidth)
+                    ->equal('profile', $bwPromo)
                     ->equal('comment', 'LUNAS');
 
             // Send query and read response from RouterOS (ordinary answer from update/create/delete queries has empty body)
@@ -97,6 +120,7 @@ class AktivasiController extends Controller
             * Insert data promo ke tb_promopelanggan
             * Insert user_pppoe dan password_pppoe ke MikroTik
             * Insert data biaya pemasangan baru ke tb_keuangan
+            * cek promo berakhir menggunakan scheduler
         */
 
         toast('Aktivasi berhasil!','success');
@@ -110,9 +134,12 @@ class AktivasiController extends Controller
     
         $pppActive = $client->query($queryPPPActive)->read();
 
+        $dataPelanggan = Pelanggan::all();
+
         return view('aktivasi.pelanggan-online', [
             'totalOnline' => count($pppActive),
-            'pppActive' => $pppActive
+            'pppActive' => $pppActive,
+            'pelanggan' => $dataPelanggan
         ]);
     }
 }
