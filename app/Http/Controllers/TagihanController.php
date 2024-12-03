@@ -27,6 +27,7 @@ class TagihanController extends Controller
     }
 
     public function store(Request $request) {
+        // perintah update tagihan lunas
         $dataTagihan = Tagihan::where('kode_tagihan', $request->kode_tagihan)->first();
 
         $bulanTagihan = 'Tagihan ' . date('M') . '-' . date('Y');
@@ -39,6 +40,7 @@ class TagihanController extends Controller
             'jumlah'    => 'required',
         ]);
 
+        // perintah update comment lunas di secret mikrotik
         if($dataTagihan->deskripsi == $bulanTagihan) {
             $client = new Client(config('mikrotik.credential'));
 
@@ -47,11 +49,30 @@ class TagihanController extends Controller
             $secrets = $client->query($query)->read();
 
             foreach ($secrets as $secret) {
-                $query = (new Query('/ppp/secret/set'))
-                        ->equal('.id', $secret['.id'])
-                        ->equal('comment', 'LUNAS');
+                // perintah remove connection active
+                $queryActive = (new Query('/ppp/active/getall'))
+                            ->where('name', $secret['name']);
+                $response = $client->query($queryActive)->read();
+
+                $queryRemoveActive = (new Query('/ppp/active/remove'))
+                         ->equal('.id', $response[0]['.id']);
+                $client->query($queryRemoveActive)->read();
                 
-                $client->query($query)->read();
+                 // kondisi jika pelanggan terisolir
+                 if($secret['profile'] == 'pelanggan-terisolir') {
+                    $query = (new Query('/ppp/secret/set'))
+                    ->equal('.id', $secret['.id'])
+                    ->equal('profile', $dataTagihan->pelanggan->paket->bandwidth)
+                    ->equal('comment', 'LUNAS');
+            
+                    $client->query($query)->read();
+                } else {
+                    $query = (new Query('/ppp/secret/set'))
+                    ->equal('.id', $secret['.id'])
+                    ->equal('comment', 'LUNAS');
+            
+                    $client->query($query)->read();
+                }
             }
         }
 

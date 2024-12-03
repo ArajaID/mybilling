@@ -63,15 +63,14 @@ class GenerateTagihan implements ShouldQueue
 
              // Perintah mengirim pemberitahuan ke WA pelanggan
 
-            $send = new Message();
+            // $send = new Message();
 
-            $tagihanRupiah = number_format($jumlahTagihan,  2, ",", ".");
+            // $tagihanRupiah = number_format($jumlahTagihan,  2, ",", ".");
 
-            $phones     = $pelanggan->no_telepon;
-            $message    = 'Pelanggan, *' . $pelanggan->nama_pelanggan . '* tagihan internet anda Rp. ' . $tagihanRupiah . '. Mohon lakukan pembayaran melalui QRIS agar layanan tetap aktif.';
+            // $phones     = $pelanggan->no_telepon;
+            // $message    = 'Pelanggan, *' . $pelanggan->nama_pelanggan . '* tagihan internet anda Rp. ' . $tagihanRupiah . '. Mohon lakukan pembayaran melalui QRIS agar layanan tetap aktif.';
        
-            $send->single_text($phones,$message);
-
+            // $send->single_text($phones,$message);
         }
 
         // Perintah update Comment di MikroTik
@@ -82,11 +81,21 @@ class GenerateTagihan implements ShouldQueue
         $secrets = $client->query($query)->read();
         
         foreach ($secrets as $secret) {
+            // perintah remove connection active
+            $queryActive = (new Query('/ppp/active/getall'))
+                            ->where('name', $secret['name']);
+            $response = $client->query($queryActive)->read();
+
+            $queryRemoveActive = (new Query('/ppp/active/remove'))
+                                ->equal('.id', $response[0]['.id']);
+            $client->query($queryRemoveActive)->read();
+
+            // perintah ubah comment ke BELUM-LUNAS
             $query = (new Query('/ppp/secret/set'))
                 ->equal('.id', $secret['.id'])
                 ->equal('comment', 'BELUM-LUNAS');
         
             $client->query($query)->read();
-        } 
+        }
     }
 }

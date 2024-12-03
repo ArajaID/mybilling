@@ -26,7 +26,6 @@ class IsolirPelangganJob implements ShouldQueue
      */
     public function handle(): void
     {
-         // Perintah update Comment di MikroTik
          $client = new Client(config('mikrotik.credential'));
 
          $query = new Query('/ppp/secret/print');
@@ -34,16 +33,21 @@ class IsolirPelangganJob implements ShouldQueue
          $secrets = $client->query($query)->read();
          
          foreach ($secrets as $secret) {
-            $queryActive = (new Query('/ppp/active/print'))
+            // perintah remove connection active
+            $queryActive = (new Query('/ppp/active/getall'))
                             ->where('name', $secret['name']);
-            $client->query($queryActive)->read();
+            $response = $client->query($queryActive)->read();
 
-             $query = (new Query('/ppp/secret/set'))
-                 ->equal('.id', $secret['.id'])
-                 ->equal('profile', 'pelanggan-terisolir');
-         
-             $client->query($query)->read();
-             
+            $queryRemoveActive = (new Query('/ppp/active/remove'))
+                                    ->equal('.id', $response[0]['.id']);
+            $client->query($queryRemoveActive)->read();
+
+            // perintah untuk merubah profile menjadi isolir
+            $query = (new Query('/ppp/secret/set'))
+                    ->equal('.id', $secret['.id'])
+                    ->equal('profile', 'pelanggan-terisolir');
+
+            $client->query($query)->read();
          }
     }
 }

@@ -26,6 +26,8 @@ return new class extends Migration
                 ->references('id')->on('tb_promo')
                 ->onDelete('cascade');
 
+            $table->boolean('is_active')->default(1);
+
             $table->timestamps();
         });
     }

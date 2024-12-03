@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\CekBerlakuPromoJob;
 use App\Jobs\GenerateTagihan;
 use App\Jobs\IsolirPelangganJob;
 use Illuminate\Foundation\Inspiring;
@@ -11,8 +12,10 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote')->hourly();
 
-// Schedule::job(new GenerateTagihan)
-// ->everyMinute();
+Schedule::job(new GenerateTagihan)
+->monthlyOn(15, '00:01');
 
 Schedule::job(new IsolirPelangganJob)
-->everyMinute();
+->monthlyOn(20, '23:59');
+
+Schedule::job(new CekBerlakuPromoJob)->daily();
