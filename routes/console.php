@@ -21,6 +21,6 @@ Schedule::job(new IsolirPelangganJob)
 
 Schedule::job(new CekBerlakuPromoJob)->daily();
 
-Schedule::call(function () {
-        Log::info('Cron Job Berjalan Lancar Jaya');
-})->everyMinute();
+// Schedule::call(function () {
+//         Log::info('Cron Job Berjalan Lancar Jaya');
+// })->everyMinute();
