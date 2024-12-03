@@ -1,8 +1,9 @@
 <?php
 
-use App\Jobs\CekBerlakuPromoJob;
 use App\Jobs\GenerateTagihan;
+use App\Jobs\CekBerlakuPromoJob;
 use App\Jobs\IsolirPelangganJob;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
@@ -19,3 +20,7 @@ Schedule::job(new IsolirPelangganJob)
 ->monthlyOn(20, '23:59');
 
 Schedule::job(new CekBerlakuPromoJob)->daily();
+
+Schedule::call(function () {
+        Log::info('Cron Job Berjalan Lancar Jaya');
+})->everyMinute();
