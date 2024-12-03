@@ -14,7 +14,7 @@ class PromoController extends Controller
      */
     public function index()
     {
-        $promo = Promo::where('kode_promo', '!=', 0)->get();
+        $promo = Promo::all();
 
         return view('promo.index', [
             'dataPromo' => $promo
