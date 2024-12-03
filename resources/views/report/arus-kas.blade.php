@@ -80,7 +80,7 @@
                             @foreach ($dataTransaksi as $data)
                                 <tr>
                                     <td style="text-align: center">{{ $no++ }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($data->tanggal)->format('d-m-Y') }}</td>
                                     <td>{{ $data->sumber }}</td>
                                     <td>{{ $data->kategori }}</td>
                                     <td>{{ $data->deskripsi }}</td>
