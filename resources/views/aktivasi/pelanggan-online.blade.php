@@ -27,7 +27,8 @@
             <table class="table table-head-fixed text-nowrap">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th>Kode Pelanggan</th>
+                        <th>Nama Pelanggan</th>
                         <th>User PPPoE</th>
                         <th>Caller ID</th>
                         <th>IP Address</th>
@@ -39,7 +40,8 @@
                         @foreach ($pelanggan as $item)
                             @if ($data['name'] == $item->user_pppoe)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $item->kode_pelanggan }}</td>
+                                    <td>{{ $item->nama_pelanggan }}</td>
                                     <td>{{ $data['name'] }}</td>
                                     <td>{{ $data['caller-id'] }}</td>
                                     <td>{{ $data['address'] }}</td>

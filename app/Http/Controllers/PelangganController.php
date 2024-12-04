@@ -17,7 +17,7 @@ class PelangganController extends Controller
      */
     public function index()
     {
-        $dataPelanggan = Pelanggan::with('paket')->paginate(3);
+        $dataPelanggan = Pelanggan::with('paket')->paginate(10);
 
         return view('pelanggan.index', [
             'pelanggan' => $dataPelanggan
