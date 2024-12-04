@@ -89,7 +89,7 @@
         <meta name="msapplication-TileImage" content="{{ asset('favicon/ms-icon-144x144.png') }}">
     @endif
 
-
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 </head>
 
