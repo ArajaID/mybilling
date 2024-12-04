@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Pelanggan;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ODCController;
 use App\Http\Controllers\ODPController;
@@ -10,8 +11,8 @@ use App\Http\Controllers\TagihanController;
 use App\Http\Controllers\AktivasiController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PemasukanController;
+use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\PengeluaranController;
-use App\Models\Pelanggan;
 
 Route::get('/', function () {
     return redirect('login');
@@ -48,3 +49,5 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/report/arus-kas', [ReportController::class, 'arusKas'])->name('report.aruskas');
 });
+
+Route::get('/send-telegram', [NotifikasiController::class, 'sendTelegram']);
