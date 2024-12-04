@@ -7,7 +7,7 @@
 @stop
 
 @section('content')
-    <form action="" method="get">
+    {{-- <form action="" method="get">
         <div class="row">
             <div class="col-md-3">
                 <x-adminlte-select2 name="bulan" label="Bulan" data-placeholder="Pilih bulan...">
@@ -43,7 +43,7 @@
                 <button type="submit" class="btn btn-primary">Cari</button>
             </div>
         </div>
-    </form>
+    </form> --}}
 
     <div class="row">
         <div class="col-md-12">

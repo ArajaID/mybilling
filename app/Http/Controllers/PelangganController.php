@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Paket;
+use App\Models\Promo;
 use App\Models\DataODC;
 use App\Models\DataODP;
 use App\Models\Tagihan;
 use App\Models\Pelanggan;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\PromoPelanggan;
 
 class PelangganController extends Controller
 {
@@ -80,10 +82,13 @@ class PelangganController extends Controller
     {
         $dataPelanggan = Pelanggan::findOrFail($id);
         $historyTagihan = Tagihan::where('id_pelanggan', $id)->paginate(10);
+        $promoPelanggan = PromoPelanggan::where('id_pelanggan', $id)->first();
+        $promoActive = Promo::findOrFail($promoPelanggan->id_promo);
 
         return view('pelanggan.show', [
             'pelanggan' => $dataPelanggan,
-            'historyTagihan' => $historyTagihan
+            'historyTagihan' => $historyTagihan,
+            'promoActive' => $promoActive
         ]);
     }
 

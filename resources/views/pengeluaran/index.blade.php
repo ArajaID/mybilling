@@ -20,6 +20,7 @@
                         <th>Tanggal</th>
                         <th>Sumber</th>
                         <th>Kategori</th>
+                        <th>Deskripsi</th>
                         <th>Metode Pembayaran</th>
                         <th>Jumlah</th>
                     </tr>
@@ -31,12 +32,18 @@
                             <td>{{ \Carbon\Carbon::parse($data->tanggal)->format('d-m-Y') }}</td>
                             <td>{{ $data->sumber }}</td>
                             <td>{{ $data->kategori }}</td>
+                            <td>{{ $data->deskripsi }}</td>
                             <td>{{ $data->metode_pembayaran }}</td>
                             <td>@currency($data->kredit)</td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+            <div class="clearfix card-footer">
+                <ul class="float-right m-0 pagination pagination-sm">
+                    {{ $pengeluaran->links() }}
+                </ul>
+            </div>
         </div>
     </div>
 @stop

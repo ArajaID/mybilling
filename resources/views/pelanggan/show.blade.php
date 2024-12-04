@@ -43,7 +43,9 @@
                     <hr>
 
                     <strong><i class="mr-1 fas fa-map-marker-alt"></i> Alamat ODC dan ODP</strong>
-                    <p class="text-muted">{{ $pelanggan->odpData->odp }}</p>
+                    <p class="text-muted">
+                        {{ $pelanggan->odpData->odc->odc_induk . '/' . $pelanggan->odpData->odc->odc . '/' . $pelanggan->odpData->odp }}
+                    </p>
 
                     <hr>
 
@@ -52,6 +54,21 @@
                         User PPPoE : {{ $pelanggan->user_pppoe }} <br>
                         Password PPPoE : {{ $pelanggan->password_pppoe }}
                     </p>
+
+                    <hr>
+
+                    <strong><i class="mr-1 fas fa-percent"></i> Promo</strong>
+
+                    <p class="text-muted">
+                        @if ($promoActive->kode_promo != 0)
+                            Kode Promo : {{ $promoActive->kode_promo }} <br>
+                            Promo : {{ $promoActive->nama_promo }}
+                        @else
+                            Tanpa Promo
+                        @endif
+                    </p>
+
+                    <hr>
                 </div>
             </div>
         </div>

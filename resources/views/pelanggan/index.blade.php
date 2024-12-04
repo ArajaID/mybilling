@@ -52,11 +52,12 @@
                             <td>
                                 <a href="{{ route('pelanggan.show', $data->id) }}" class="btn btn-warning btn-sm"><i
                                         class="fas fa-eye"></i> Detail</a>
-                                <a href="{{ route('aktivasi.create') . '?kode_pelanggan=' . $data->kode_pelanggan }}"
-                                    class="btn btn-info btn-sm {{ $data->aktivasi_layanan ? 'disabled' : '' }}"><i
-                                        class="fas fa-key"></i> Aktivasi</a>
+                                @if (!$data->aktivasi_layanan)
+                                    <a href="{{ route('aktivasi.create') . '?kode_pelanggan=' . $data->kode_pelanggan }}"
+                                        class="btn btn-info btn-sm"><i class="fas fa-key"></i> Aktivasi</a>
+                                @endif
                                 @if ($data->aktivasi_layanan)
-                                    <a href="" class="btn btn-dark btn-sm"><i class="fas fa-print"></i> Cetak</a>
+                                    <a href="#" class="btn btn-dark btn-sm"><i class="fas fa-print"></i> Cetak</a>
                                 @endif
                             </td>
                         </tr>
