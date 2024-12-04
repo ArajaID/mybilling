@@ -15,11 +15,13 @@
                     <div class="card-body">
 
                         <div class="row">
+                            <input type="hidden" name="kode_pelanggan" value="{{ $tagihan->pelanggan->kode_pelanggan }}">
+
                             <x-adminlte-input name="kode_tagihan" label="No Tagihan" fgroup-class="col-md-2"
                                 value="{{ old('kode_tagihan', $tagihan->kode_tagihan) }}" readonly />
 
-                            <x-adminlte-input name="pelanggan" label="Pelanggan" fgroup-class="col-md-2"
-                                value="{{ $tagihan->pelanggan->nama_pelanggan }}" disabled />
+                            <x-adminlte-input name="nama_pelanggan" label="Nama Pelanggan" fgroup-class="col-md-2"
+                                value="{{ old('pelanggan', $tagihan->pelanggan->nama_pelanggan) }}" readonly />
 
                             <x-adminlte-input name="deskripsi" label="Deskripsi" fgroup-class="col-md-2"
                                 value="{{ old('deskripsi', $tagihan->deskripsi) }}" readonly />

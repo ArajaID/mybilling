@@ -75,6 +75,8 @@ class TagihanController extends Controller
                 }
             }
         }
+        
+        $deskripsiTransaksi = $request->kode_pelanggan . ' - ' . $request->nama_pelanggan;
 
         Transaksi::create([
             'jenis_transaksi'   => 'Pemasukan',
@@ -83,6 +85,7 @@ class TagihanController extends Controller
             'debit'             => $request->jumlah,
             'kategori'          => $request->deskripsi,
             'metode_pembayaran' => $request->metode_pembayaran,
+            'deskripsi'         => $deskripsiTransaksi
         ]);
         
         toast('Tagihan no ' . $request->kode_tagihan . ' Lunas!','success');
