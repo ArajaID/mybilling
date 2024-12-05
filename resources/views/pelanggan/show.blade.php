@@ -37,7 +37,7 @@
 
                     <strong><i class="mr-1 fas fa-phone"></i> No HP</strong>
                     <p class="text-muted">
-                        {{ $pelanggan->no_telepon ? $pelanggan->telepon : 'Data tidak ada' }}
+                        {{ $pelanggan->no_telepon ? $pelanggan->no_telepon : 'Data tidak ada' }}
                     </p>
 
                     <hr>
@@ -60,7 +60,8 @@
                     <strong><i class="mr-1 fas fa-percent"></i> Promo</strong>
 
                     <p class="text-muted">
-                        @if ($promoActive->kode_promo != 0)
+
+                        @if ($promoActive)
                             Kode Promo : {{ $promoActive->kode_promo }} <br>
                             Promo : {{ $promoActive->nama_promo }}
                         @else

@@ -28,6 +28,15 @@ class Pelanggan extends Model
         ->logOnlyDirty(true);
     }
 
+    public function scopeSearch($query, $val)
+    {
+        if(isset($val) ? $val : false) {
+            return $query->where('kode_pelanggan', 'like', '%' . $val . '%')
+                ->orWhere('nama_pelanggan', 'like', '%' . $val . '%')
+                ->orWhere('blok', 'like', '%' . $val . '%');
+        }
+    }
+
     public function promo()
     {
         return $this->belongsToMany(Promo::class);

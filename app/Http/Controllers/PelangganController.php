@@ -19,10 +19,13 @@ class PelangganController extends Controller
      */
     public function index()
     {
-        $dataPelanggan = Pelanggan::with('paket')->paginate(10);
+        $search = request('keyword');
+
+        $dataPelanggan = Pelanggan::with('paket')->search($search)->paginate(10);
 
         return view('pelanggan.index', [
-            'pelanggan' => $dataPelanggan
+            'pelanggan' => $dataPelanggan,
+            'search' => $search
         ]);
     }
 
@@ -83,7 +86,11 @@ class PelangganController extends Controller
         $dataPelanggan = Pelanggan::findOrFail($id);
         $historyTagihan = Tagihan::where('id_pelanggan', $id)->paginate(10);
         $promoPelanggan = PromoPelanggan::where('id_pelanggan', $id)->first();
-        $promoActive = Promo::findOrFail($promoPelanggan->id_promo);
+        if($promoPelanggan) {
+            $promoActive = Promo::findOrFail($promoPelanggan->id_promo);
+        } else {
+            $promoActive = "";
+        }
 
         return view('pelanggan.show', [
             'pelanggan' => $dataPelanggan,

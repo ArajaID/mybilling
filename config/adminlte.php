@@ -398,6 +398,15 @@ return [
                 ],
             ],
         ],
+
+        [
+            'header' => 'AKUN',
+        ],
+        [
+            'text'      => 'Reset Password',
+            'url'       => 'change-password',
+            'icon'      => 'fas fa-fw fa-unlock',
+        ],
     ],
 
     /*

@@ -7,6 +7,7 @@ use App\Http\Controllers\ODPController;
 use App\Http\Controllers\PaketController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TagihanController;
 use App\Http\Controllers\AktivasiController;
 use App\Http\Controllers\PelangganController;
@@ -48,6 +49,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/pengeluaran', [PengeluaranController::class, 'store'])->name('pengeluaran.store');
 
     Route::get('/report/arus-kas', [ReportController::class, 'arusKas'])->name('report.aruskas');
+    
+    Route::get('/change-password', [ProfileController::class, 'changePassword']);
+    Route::post('/change-password', [ProfileController::class, 'updatePassword'])->name('update-password');
 });
 
 Route::get('/send-telegram', [NotifikasiController::class, 'sendTelegram']);
