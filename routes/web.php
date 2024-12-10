@@ -49,6 +49,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/pengeluaran', [PengeluaranController::class, 'store'])->name('pengeluaran.store');
 
     Route::get('/report/arus-kas', [ReportController::class, 'arusKas'])->name('report.aruskas');
+    Route::get('/report/arus-kas-pdf/{start_date}/{end_date}', [ReportController::class, 'arusKasPDF'])->name('report.aruskaspdf');
     
     Route::get('/change-password', [ProfileController::class, 'changePassword']);
     Route::post('/change-password', [ProfileController::class, 'updatePassword'])->name('update-password');

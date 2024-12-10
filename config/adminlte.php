@@ -393,8 +393,16 @@ return [
             'icon' => 'fas fa-fw fa-copy',
             'submenu' => [
                 [
-                    'text' => 'Keuangan',
+                    'text' => 'Arus Kas',
                     'url' => 'report/arus-kas',
+                ],
+                [
+                    'text' => 'Promo Pelanggan',
+                    'url' => '',
+                ],
+                [
+                    'text' => 'List Pelanggan',
+                    'url' => '',
                 ],
             ],
         ],
