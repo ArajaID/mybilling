@@ -42,17 +42,31 @@
                         <thead>
                             <tr>
                                 <th style="width: 10px">No</th>
-                                <th>Tanggal</th>
-                                <th>Sumber</th>
-                                <th>Kategori</th>
-                                <th>Deskripsi</th>
-                                <th>Debit</th>
-                                <th>Kredit</th>
-                                <th>Saldo</th>
+                                <th>Kode Pelanggan</th>
+                                <th>Nama Pelanggan</th>
+                                <th>Aktivasi</th>
+                                <th>Tanggal Aktivasi</th>
+                                <th>Promo</th>
+                                <th>Status Pelanggan</th>
                             </tr>
                         </thead>
                         <tbody>
-
+                            @foreach ($pelanggan as $data)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $data->kode_pelanggan }}</td>
+                                    <td>{{ $data->nama_pelanggan }}</td>
+                                    <td>{{ $data->aktivasi_layanan }}</td>
+                                    <td>{{ $data->tanggal_aktivasi }}</td>
+                                    <td>
+                                        @foreach ($data->promo as $item)
+                                            {{ $item->nama_promo . ' ' . $item->tanggal_berakhir_promo }}
+                                            {{ $item->pivot->tanggal_berakhir_promo }}
+                                        @endforeach
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

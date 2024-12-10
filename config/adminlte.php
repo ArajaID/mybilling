@@ -398,7 +398,7 @@ return [
                 ],
                 [
                     'text' => 'Promo Pelanggan',
-                    'url' => '',
+                    'url' => 'report/promo-pelanggan',
                 ],
                 [
                     'text' => 'List Pelanggan',

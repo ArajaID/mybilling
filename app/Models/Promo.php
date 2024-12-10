@@ -26,7 +26,8 @@ class Promo extends Model
 
     public function pelanggan()
     {
-        return $this->belongsToMany(Pelanggan::class);
+        return $this->belongsToMany(Pelanggan::class, 'tb_promopelanggan', 'id', 'id_pelanggan')
+        ->withPivot('tanggal_berakhir_promo', 'is_active');
     }
 
 }

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
+use App\Models\Pelanggan;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
-use PDF;
+use App\Models\PromoPelanggan;
 
 class ReportController extends Controller
 {
@@ -47,5 +49,13 @@ class ReportController extends Controller
             'tanggalAkhir'  => $end_date
         ]);
         return $pdf->stream('Laporan-Data-Santri.pdf');
+    }
+
+    public function promoPelanggan() {
+        $pelangganData = Pelanggan::with('promo')->where('is_active', 1)->get();
+
+        return view('report.promo-pelanggan', [
+            'pelanggan' => $pelangganData
+        ]);
     }
 }

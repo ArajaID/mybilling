@@ -39,7 +39,8 @@ class Pelanggan extends Model
 
     public function promo()
     {
-        return $this->belongsToMany(Promo::class);
+        return $this->belongsToMany(Promo::class, 'tb_promopelanggan', 'id', 'id_promo')
+        ->withPivot('tanggal_berakhir_promo', 'is_active');
     }
 
     public function paket()
