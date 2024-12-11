@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class PemasukanController extends Controller
 {
     public function index() {
-        $dataTransaksiPemasukan = Transaksi::where('jenis_transaksi', 'Pemasukan')->orderBy('tanggal', 'asc')->paginate(20);
+        $dataTransaksiPemasukan = Transaksi::where('jenis_transaksi', 'Pemasukan')->orderBy('tanggal', 'desc')->paginate(20);
         
         return view('pemasukan.index', [
             'pemasukan' => $dataTransaksiPemasukan
