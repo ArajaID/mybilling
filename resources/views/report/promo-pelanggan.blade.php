@@ -22,7 +22,6 @@
                     <table class="table table-head-fixed text-nowrap">
                         <thead>
                             <tr>
-                                <th style="width: 10px">No</th>
                                 <th>Kode Pelanggan</th>
                                 <th>Nama Pelanggan</th>
                                 <th>Tanggal Klaim</th>
@@ -36,7 +35,6 @@
                                 @foreach ($data->promo as $item)
                                     @if ($item->id != 1)
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
                                             <td>{{ $data->kode_pelanggan }}</td>
                                             <td>{{ $data->nama_pelanggan }}</td>
                                             <td>{{ \Carbon\Carbon::parse($data->tanggal_aktivasi)->isoFormat('D MMM Y') }}
