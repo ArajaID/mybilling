@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use RouterOS\Query;
 use RouterOS\Client;
+use App\Models\Paket;
 use App\Models\Tagihan;
+use App\Models\Pelanggan;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 
@@ -29,6 +31,10 @@ class TagihanController extends Controller
     public function store(Request $request) {
         // perintah update tagihan lunas
         $dataTagihan = Tagihan::where('kode_tagihan', $request->kode_tagihan)->first();
+        // cek apakah pelanggan sedang menggunakan promo
+        $pelanggan = Pelanggan::findOrFail($dataTagihan->id_pelanggan);
+        // cek paket promo yang sedang dipakai
+        $paket = Paket::findOrFail($pelanggan->promo[0]->tambahan_speed);
 
         $bulanTagihan = 'Tagihan ' . date('M') . '-' . date('Y');
 
@@ -60,9 +66,17 @@ class TagihanController extends Controller
                 
                  // kondisi jika pelanggan terisolir
                  if($secret['profile'] == 'pelanggan-terisolir') {
+                    
+                    // cek pelanggan menggunakan promo atau tidak
+                    if($pelanggan->promo[0]->tambahan_speed) {
+                        $dataPaket = $paket->bandwidth;
+                    } else {
+                        $dataPaket = $dataTagihan->pelanggan->paket->bandwidth;
+                    }
+
                     $query = (new Query('/ppp/secret/set'))
                     ->equal('.id', $secret['.id'])
-                    ->equal('profile', $dataTagihan->pelanggan->paket->bandwidth)
+                    ->equal('profile', $dataPaket)
                     ->equal('comment', 'LUNAS');
             
                     $client->query($query)->read();

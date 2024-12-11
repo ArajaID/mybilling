@@ -58,4 +58,12 @@ class ReportController extends Controller
             'pelanggan' => $pelangganData
         ]);
     }
+
+    public function pelanggan() {
+        $pelangganData = Pelanggan::with('promo')->where('is_active', 1)->paginate(20);
+
+        return view('report.pelanggan', [
+            'pelanggan' => $pelangganData
+        ]);
+    }
 }

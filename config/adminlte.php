@@ -402,7 +402,7 @@ return [
                 ],
                 [
                     'text' => 'List Pelanggan',
-                    'url' => '',
+                    'url' => 'report/pelanggan',
                 ],
             ],
         ],
