@@ -13,31 +13,38 @@ use Illuminate\Support\Facades\DB;
 class ReportController extends Controller
 {
       public function arusKas(Request $request) {
-
         $transaksi = Transaksi::query();
 
         // Filter berdasarkan rentang tanggal
-        if ($request->has(['start_date', 'end_date'])) {
-            $start_date = $request->input('start_date');
-            $end_date   = $request->input('end_date');
-            $transaksi  = $transaksi->whereBetween('tanggal', [$start_date, $end_date]);
-        }
+        $start_date = $request->input('start_date', null);
+        $end_date   = $request->input('end_date', null);
 
+        // Pastikan $start_date dan $end_date memiliki nilai
+        if ($start_date && $end_date) {
+            $transaksi = $transaksi->whereBetween('tanggal', [$start_date, $end_date]);
+        }
+        
         $transaksi = $transaksi->orderBy('tanggal', 'asc')->get();
 
         $totalDebit = $transaksi->where('jenis_transaksi', 'Pemasukan')->sum('debit');
         $totalKredit = $transaksi->where('jenis_transaksi', 'Pengeluaran')->sum('kredit');
 
-        // buatkan saldo bulan sebelumnya
-        $saldo = Transaksi::where('tanggal', '<', $start_date)->get();
+        // Hitung saldo bulan sebelumnya
         $saldoBulanSebelumnya = 0;
-        foreach ($saldo as $item) {
-            if ($item->jenis_transaksi == 'Pemasukan') {
-                $saldoBulanSebelumnya += $item->debit;
-            } else {
-                $saldoBulanSebelumnya -= $item->kredit;
+
+        // buatkan saldo bulan sebelumnya
+        if($start_date) {
+            $saldo = Transaksi::where('tanggal', '<', $start_date)->get();
+            $saldoBulanSebelumnya = 0;
+            foreach ($saldo as $item) {
+                if ($item->jenis_transaksi == 'Pemasukan') {
+                    $saldoBulanSebelumnya += $item->debit;
+                } else {
+                    $saldoBulanSebelumnya -= $item->kredit;
+                }
             }
         }
+        
         // tambahkan saldo bulan sebelumnya ke total debit
         $totalDebit += $saldoBulanSebelumnya;
 
