@@ -62,8 +62,15 @@
 
                                     @php
                                         $no = 1;
-                                        $saldo = 0;
+                                        $saldo = $saldoBulanSebelumnya;
                                     @endphp
+
+                                    <!-- Baris saldo bulan sebelumnya -->
+                                    <tr>
+                                        <td colspan="7" style="text-align: center"><strong>Saldo Bulan
+                                                Sebelumnya</strong></td>
+                                        <td style="text-align: right"><strong>@currency($saldoBulanSebelumnya)</strong></td>
+                                    </tr>
 
                                     @foreach ($dataTransaksi as $data)
                                         <tr>

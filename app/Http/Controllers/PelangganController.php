@@ -21,7 +21,7 @@ class PelangganController extends Controller
     {
         $search = request('keyword');
 
-        $dataPelanggan = Pelanggan::with('paket')->search($search)->paginate(10);
+        $dataPelanggan = Pelanggan::with('paket')->search($search)->where('is_active', 1)->paginate(10);
 
         return view('pelanggan.index', [
             'pelanggan' => $dataPelanggan,
@@ -127,5 +127,17 @@ class PelangganController extends Controller
     {
         $dataODP = DataODP::where('odc_id', $odc_id)->get();
         return response()->json($dataODP);
+    }
+
+    public function changeStatus(Request $request)
+    {
+        $pelanggan = Pelanggan::find($request->pelanggan_id);
+        dd($pelanggan);
+        $pelanggan->is_active = $request->is_active;
+
+        $pelanggan->save();
+
+        return response()->json(['success'=>'Status change successfully.']);
+
     }
 }

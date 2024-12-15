@@ -25,6 +25,7 @@
                                 <option value="0">Pilih Metode Pembayaran</option>
                                 <option value="QRIS">QRIS</option>
                                 <option value="Cash">Cash</option>
+                                <option value="Transfer">Transfer</option>
                             </x-adminlte-select>
                             <x-adminlte-textarea name="deskripsi" label="Deskripsi" fgroup-class="col-md-4" />
                         </div>

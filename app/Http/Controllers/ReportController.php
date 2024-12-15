@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use PDF;
+use Carbon\Carbon;
 use App\Models\Pelanggan;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use App\Models\PromoPelanggan;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
@@ -21,34 +23,64 @@ class ReportController extends Controller
             $transaksi  = $transaksi->whereBetween('tanggal', [$start_date, $end_date]);
         }
 
-        $transaksi = $transaksi->get();
+        $transaksi = $transaksi->orderBy('tanggal', 'asc')->get();
 
         $totalDebit = $transaksi->where('jenis_transaksi', 'Pemasukan')->sum('debit');
         $totalKredit = $transaksi->where('jenis_transaksi', 'Pengeluaran')->sum('kredit');
 
+        // buatkan saldo bulan sebelumnya
+        $saldo = Transaksi::where('tanggal', '<', $start_date)->get();
+        $saldoBulanSebelumnya = 0;
+        foreach ($saldo as $item) {
+            if ($item->jenis_transaksi == 'Pemasukan') {
+                $saldoBulanSebelumnya += $item->debit;
+            } else {
+                $saldoBulanSebelumnya -= $item->kredit;
+            }
+        }
+        // tambahkan saldo bulan sebelumnya ke total debit
+        $totalDebit += $saldoBulanSebelumnya;
+
         return view('report.arus-kas', [
             'dataTransaksi' => $transaksi,
             'totalDebit'    => $totalDebit,
-            'totalKredit'   => $totalKredit
+            'totalKredit'   => $totalKredit,
+            'saldoBulanSebelumnya' => $saldoBulanSebelumnya,
         ]);
     }
 
     public function arusKasPDF($start_date, $end_date) {
         $transaksi = Transaksi::query();
         $transaksi = $transaksi->whereBetween('tanggal', [$start_date, $end_date]);
-        $transaksi = $transaksi->get();
+        $transaksi = $transaksi->orderBy('tanggal', 'asc')->get();
 
         $totalDebit = $transaksi->where('jenis_transaksi', 'Pemasukan')->sum('debit');
         $totalKredit = $transaksi->where('jenis_transaksi', 'Pengeluaran')->sum('kredit');
+
+        // buatkan saldo bulan sebelumnya
+        $saldo = Transaksi::where('tanggal', '<', $start_date)->get();
+        $saldoBulanSebelumnya = 0;
+        foreach ($saldo as $item) {
+            if ($item->jenis_transaksi == 'Pemasukan') {
+                $saldoBulanSebelumnya += $item->debit;
+            } else {
+                $saldoBulanSebelumnya -= $item->kredit;
+            }
+        }
+        // tambahkan saldo bulan sebelumnya ke total debit
+        $totalDebit += $saldoBulanSebelumnya;
 
         $pdf = PDF::loadView('report.pdf.arus-kas', [
             'dataTransaksi' => $transaksi,
             'totalDebit'    => $totalDebit,
             'totalKredit'   => $totalKredit,
             'tanggalAwal'   => $start_date,
-            'tanggalAkhir'  => $end_date
+            'tanggalAkhir'  => $end_date,
+            'saldoBulanSebelumnya' => $saldoBulanSebelumnya,
         ]);
-        return $pdf->stream('Laporan-Data-Santri.pdf');
+
+        $fileName = 'Laporan-Arus-Kas-' . $start_date . '-' . $end_date . '.pdf';
+        return $pdf->stream($fileName);
     }
 
     public function promoPelanggan() {

@@ -36,7 +36,7 @@
         }
 
         .tbody {
-            font-size: 13px
+            font-size: 11px
         }
     </style>
 </head>
@@ -58,22 +58,44 @@
                 <th scope="col">Deskripsi</th>
                 <th scope="col" class="text-right">Debit</th>
                 <th scope="col" class="text-right">Kredit</th>
+                <th scope="col" class="text-right">Saldo</th>
             </tr>
         </thead>
         <tbody class="tbody">
+            @php
+                $no = 1;
+                $saldo = $saldoBulanSebelumnya;
+            @endphp
+
+            <!-- Baris saldo bulan sebelumnya -->
+            <tr>
+                <td colspan="5" style="text-align: center"><strong>Saldo Bulan
+                        Sebelumnya</strong></td>
+                <td style="text-align: right"><strong>{{ number_format($saldoBulanSebelumnya, '0', ',', '.') }}</strong>
+                </td>
+            </tr>
+
             @foreach ($dataTransaksi as $data)
                 <tr>
-                    <td>{{ \Carbon\Carbon::parse($data->tanggal)->isoFormat('D MMM Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($data->tanggal)->format('d-m-Y') }}</td>
                     <td>{{ $data->kategori }}</td>
                     <td>{{ $data->sumber . ' ' . $data->deskripsi }}</td>
-                    <td class="text-right">{{ $data->debit != 0 ? number_format($data->debit) : '' }}</td>
-                    <td class="text-right">{{ $data->kredit != 0 ? number_format($data->kredit) : '' }}</td>
+                    <td class="text-right">{{ $data->debit != 0 ? number_format($data->debit, '0', ',', '.') : '' }}
+                    </td>
+                    <td class="text-right">{{ $data->kredit != 0 ? number_format($data->kredit, '0', ',', '.') : '' }}
+                    </td>
+                    @php
+                        $saldo += $data->debit - $data->kredit;
+                        $saldoTotal = $totalDebit - $totalKredit;
+                    @endphp
+                    <td style="text-align: right">{{ number_format($saldo, '0', ',', '.') }}</td>
                 </tr>
             @endforeach
             <tr>
                 <th scope="col" colspan="3" class="text-right">Total</th>
-                <th scope="col" class="text-right">{{ number_format($totalDebit) }}</th>
-                <th scope="col" class="text-right">{{ number_format($totalKredit) }}</th>
+                <th scope="col" class="text-right">{{ number_format($totalDebit, '0', ',', '.') }}</th>
+                <th scope="col" class="text-right">{{ number_format($totalKredit, '0', ',', '.') }}</th>
+                <td class="text-right">{{ number_format($saldoTotal, '0', ',', '.') }}</td>
             </tr>
         </tbody>
     </table>
