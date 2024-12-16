@@ -9,6 +9,7 @@ use App\Models\Tagihan;
 use App\Models\Pelanggan;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class TagihanController extends Controller
 {
@@ -101,6 +102,13 @@ class TagihanController extends Controller
             'metode_pembayaran' => $request->metode_pembayaran,
             'deskripsi'         => $deskripsiTransaksi
         ]);
+
+        $htmlText = "Terima kasih, pelanggan *" . $request->nama_pelanggan . " (" . $request->kode_pelanggan . ")* pembayaran internet periode, *" . $request->deskripsi . "* telah kami terima." ;
+                        Telegram::sendMessage([
+                            'chat_id' => env('TELEGRAM_CHAT_ID'),
+                            'text' => $htmlText,
+                            'parse_mode' => 'Markdown'
+                        ]);
         
         toast('Tagihan no ' . $request->kode_tagihan . ' Lunas!','success');
         return redirect()->route('tagihan.index');
