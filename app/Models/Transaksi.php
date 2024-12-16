@@ -17,7 +17,7 @@ class Transaksi extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-        ->logOnly(['jenis_transaksi', 'tanggal', 'sumber', 'debit', 'kredit', 'kategori', 'metode_pembayaran', 'deskripsi', 'lampiran'])
+        ->logOnly(['jenis_transaksi', 'tanggal', 'sumber', 'debit', 'kredit', 'kategori', 'metode_pembayaran', 'deskripsi', 'lampiran', 'is_posted', 'posted_at'])
         ->useLogName('Transaksi')
         ->setDescriptionForEvent(fn(string $eventName) => "This model has been {$eventName}")
         ->logOnlyDirty(true);

@@ -37,8 +37,14 @@
                             <td>{{ $data->metode_pembayaran }}</td>
                             <td>@currency($data->kredit)</td>
                             <td>
-                                <a href="{{ route('pengeluaran.edit', $data->id) }}" class="btn btn-sm btn-primary"><i
-                                        class="fas fa-edit"></i></a>
+                                @if (!$data->is_posted)
+                                    <a href="{{ route('pengeluaran.edit', $data->id) }}" class="btn btn-sm btn-primary"><i
+                                            class="fas fa-edit"></i></a>
+                                @else
+                                    <span class="badge badge-info">Sudah diposting</span>
+                                @endif
+
+
                             </td>
                         </tr>
                     @endforeach

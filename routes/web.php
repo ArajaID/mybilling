@@ -12,6 +12,7 @@ use App\Http\Controllers\TagihanController;
 use App\Http\Controllers\AktivasiController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PemasukanController;
+use App\Http\Controllers\TutupBukuController;
 use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\PengeluaranController;
 
@@ -50,6 +51,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/change-password', [ProfileController::class, 'changePassword']);
     Route::post('/change-password', [ProfileController::class, 'updatePassword'])->name('update-password');
+
+    Route::get('/tutup-buku', [TutupBukuController::class, 'index'])->name('tutupbuku.index');
+    Route::get('/tutup-buku/{bulan}/{tahun}', [TutupBukuController::class, 'isPosted'])->name('tutupbuku.posting');
+
 });
 
 Route::get('/send-telegram', [NotifikasiController::class, 'sendTelegram']);

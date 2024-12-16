@@ -23,6 +23,7 @@
                         <th>Deskripsi</th>
                         <th>Metode Pembayaran</th>
                         <th>Jumlah</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,8 +37,12 @@
                             <td>{{ $data->metode_pembayaran }}</td>
                             <td>@currency($data->debit)</td>
                             <td>
-                                <a href="{{ route('pemasukan.edit', $data->id) }}" class="btn btn-sm btn-primary"><i
-                                        class="fas fa-edit"></i></a>
+                                @if (!$data->is_posted)
+                                    <a href="{{ route('pemasukan.edit', $data->id) }}" class="btn btn-sm btn-primary"><i
+                                            class="fas fa-edit"></i></a>
+                                @else
+                                    <span class="badge badge-info">Sudah diposting</span>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

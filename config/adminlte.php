@@ -389,6 +389,12 @@ return [
         ],
 
         [
+            'text'      => 'Tutup Buku',
+            'url'       => 'tutup-buku',
+            'icon'      => 'fas fa-fw fa-clock',
+        ],
+
+        [
             'text' => 'Laporan',
             'icon' => 'fas fa-fw fa-copy',
             'submenu' => [

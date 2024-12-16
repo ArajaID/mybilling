@@ -95,7 +95,7 @@
                 <th scope="col" colspan="3" class="text-right">Total</th>
                 <th scope="col" class="text-right">{{ number_format($totalDebit, '0', ',', '.') }}</th>
                 <th scope="col" class="text-right">{{ number_format($totalKredit, '0', ',', '.') }}</th>
-                <td class="text-right">{{ number_format($saldoTotal, '0', ',', '.') }}</td>
+                <th scope="col" class="text-right">{{ number_format($saldoTotal, '0', ',', '.') }}</th>
             </tr>
         </tbody>
     </table>

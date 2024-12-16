@@ -53,7 +53,7 @@ class GenerateTagihan implements ShouldQueue
             Tagihan::create([
                 'kode_tagihan'      => $kodeTagihan,
                 'id_pelanggan'      => $pelanggan->id,
-                'tanggal_tagihan'   => $startDate,
+                'tanggal_tagihan'   => now(),
                 'periode_bulan'     => now()->startOfMonth()->format('Y-m-d'),
                 'status_pembayaran' => 'BELUM-LUNAS',
                 'deskripsi'         => $desc,
