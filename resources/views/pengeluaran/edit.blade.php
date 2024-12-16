@@ -29,7 +29,7 @@
                                 <option value="Cash" {{ $pengeluaran->metode_pembayaran == 'Cash' ? 'selected' : '' }}>
                                     Cash</option>
                                 <option value="Transfer"
-                                    {{ $pemasukan->metode_pembayaran == 'Transfer' ? 'selected' : '' }}>
+                                    {{ $pengeluaran->metode_pembayaran == 'Transfer' ? 'selected' : '' }}>
                                     Transfer</option>
                             </x-adminlte-select>
                             <x-adminlte-textarea name="deskripsi" label="Deskripsi" fgroup-class="col-md-4"
