@@ -36,6 +36,7 @@
                                 <option value="0">Pilih Metode Pembayaran</option>
                                 <option value="QRIS" selected>QRIS</option>
                                 <option value="Cash">Cash</option>
+                                <option value="Transfer">Transfer</option>
                             </x-adminlte-select>
                         </div>
 
