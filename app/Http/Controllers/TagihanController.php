@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use RouterOS\Query;
 use RouterOS\Client;
 use App\Models\Paket;
@@ -103,7 +104,34 @@ class TagihanController extends Controller
             'deskripsi'         => $deskripsiTransaksi
         ]);
 
-        $htmlText = "Terima kasih, pelanggan *" . $request->nama_pelanggan . " (" . $request->kode_pelanggan . ")* pembayaran internet periode, *" . $request->deskripsi . "* telah kami terima." ;
+        $debit = 'Rp. ' . number_format($request->jumlah, 0, ',', '.');
+        $tanggalTransaksi = Carbon::parse($request->tanggal)->format('d-m-Y');
+        $tanggalBuat = Carbon::parse($request->created_at)->format('d-m-Y H:i:s');
+
+        $saldo = 0;
+        $transaksiAll = Transaksi::all();
+        foreach($transaksiAll as $data) {
+            $saldo += $data->debit - $data->kredit;
+        }
+        $formatSaldo = 'Rp. ' . number_format($saldo, 0, ',', '.');
+        
+
+$htmlText = "*TRANSAKSI UANG MASUK* 🔽";
+$htmlText .= "
+✅ *BERHASIL*";
+$htmlText .= "
+`===========================`
+`Tanggal   :` $tanggalTransaksi
+`Kategori  :` $request->deskripsi
+`Deskripsi :` $deskripsiTransaksi
+                                    
+`Jumlah    :` *$debit*
+`===========================`
+`Saldo     :` *$formatSaldo*
+`===========================`
+`Dibuat    :` $tanggalBuat
+`===========================`
+";
                         Telegram::sendMessage([
                             'chat_id' => env('TELEGRAM_CHAT_ID'),
                             'text' => $htmlText,
