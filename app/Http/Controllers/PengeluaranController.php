@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class PengeluaranController extends Controller
 {
@@ -33,6 +35,40 @@ class PengeluaranController extends Controller
         $validateData['kredit'] = $request->kredit;
 
         Transaksi::create($validateData);
+
+        $kredit = 'Rp. ' . number_format($request->kredit, 0, ',', '.');
+        $tanggalTransaksi = Carbon::parse($request->tanggal)->format('d-m-Y');
+        $tanggalBuat = Carbon::parse($request->created_at)->format('d-m-Y H:i:s');
+
+        $saldo = 0;
+        $transaksiAll = Transaksi::all();
+        foreach($transaksiAll as $data) {
+            $saldo += $data->debit - $data->kredit;
+        }
+        $formatSaldo = 'Rp. ' . number_format($saldo, 0, ',', '.');
+        
+
+$htmlText = "*TRANSAKSI UANG KELUAR* 🔼";
+$htmlText .= "
+✅ *BERHASIL*";
+$htmlText .= "
+`===========================`
+`Tanggal   :` $tanggalTransaksi
+`Kategori  :` $request->kategori
+`Deskripsi :` $request->deskripsi
+                                    
+`Jumlah    :` *$kredit*
+`===========================`
+`Saldo     :` *$formatSaldo*
+`===========================`
+`Dibuat    :` $tanggalBuat
+`===========================`
+";
+                        Telegram::sendMessage([
+                            'chat_id' => env('TELEGRAM_CHAT_ID'),
+                            'text' => $htmlText,
+                            'parse_mode' => 'Markdown'
+                        ]);
 
         toast('Transaksi pengeluaran berhasil ditambah!','success');
         return redirect()->route('pengeluaran.index');
