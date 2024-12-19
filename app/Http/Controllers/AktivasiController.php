@@ -12,6 +12,7 @@ use App\Models\Pelanggan;
 use Illuminate\Http\Request;
 use App\Models\PromoPelanggan;
 use Illuminate\Support\Facades\DB;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class AktivasiController extends Controller
 {
@@ -113,7 +114,36 @@ class AktivasiController extends Controller
                 'status_pembayaran' => 'BELUM-LUNAS',
                 'deskripsi'         => 'Biaya Pasang Baru'
             ]);
+
+            $formatTanggal = Carbon::parse($dataPelanggan->tanggal_aktivasi)->format('d-m-Y');
+
+$htmlText = "`==============================`
+";
+$htmlText .= "🚀 *AKTIVASI PELANGGAN BERHASIL ✅* 🚀";
+$htmlText .= "
+`==============================`
+`Tgl Aktivasi   :` $formatTanggal
+`Kode Pelanggan :` *$dataPelanggan->kode_pelanggan*
+`Nama Pelanggan :` *$dataPelanggan->nama_pelanggan*
+";
+$htmlText .= "`Paket          :` " . $dataPelanggan->paket->nama_paket;
+$htmlText .= "
+
+`User PPPoE     :` *$dataPelanggan->user_pppoe*
+`Password PPPoE :` *$dataPelanggan->password_pppoe*
+`==============================`
+_Silahakan masukkan user dan password PPPoE ke ONT Pelanggan
+
+Terima Kasih 😉_
+";
+                                    Telegram::sendMessage([
+                                        'chat_id' => env('TELEGRAM_CHAT_ID'),
+                                        'text' => $htmlText,
+                                        'parse_mode' => 'Markdown'
+                                    ]);
         });
+
+
 
          /**
             * Update status aktivasi_layanan menjadi true dan tanggal_aktivasi di tb_pelanggan.

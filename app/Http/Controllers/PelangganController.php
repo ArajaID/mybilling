@@ -21,7 +21,11 @@ class PelangganController extends Controller
     {
         $search = request('keyword');
 
-        $dataPelanggan = Pelanggan::with('paket')->search($search)->where('is_active', 1)->paginate(10);
+        $dataPelanggan = Pelanggan::with('paket')
+        ->search($search)
+        ->where('is_active', 1)
+        ->orderBy('created_at', 'desc')
+        ->paginate(10);
 
         return view('pelanggan.index', [
             'pelanggan' => $dataPelanggan,
