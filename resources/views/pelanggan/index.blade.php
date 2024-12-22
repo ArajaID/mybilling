@@ -48,11 +48,18 @@
                     </thead>
                     <tbody>
                         @foreach ($pelanggan as $data)
+                            @php
+                                if ($data->area == 'perumahan') {
+                                    $area = \Str::title($data->area);
+                                } else {
+                                    $area = \Str::title(str_replace('_', ' ', $data->area));
+                                }
+                            @endphp
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $data->kode_pelanggan }}</td>
                                 <td>{{ $data->nama_pelanggan }}</td>
-                                <td>{{ Str::title($data->area) . ' - ' . Str::upper($data->blok) }}</td>
+                                <td>{{ $area . ' - ' . Str::upper($data->blok) }}</td>
                                 <td>{{ $data->paket->nama_paket }}</td>
                                 <td>{!! $data->aktivasi_layanan
                                     ? '<badge class="badge badge-success">Sudah Diaktivasi</badge>'

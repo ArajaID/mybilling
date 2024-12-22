@@ -70,6 +70,14 @@
                     </p>
 
                     <hr>
+
+                    <strong><i class="mr-1 fas fa-clock"></i> Lama Berlangganan</strong>
+                    <p class="text-muted">
+                        {{ \Carbon\Carbon::parse($pelanggan->tanggal_aktivasi)->diffForHumans() }}
+                    </p>
+
+                    <hr>
+
                 </div>
             </div>
         </div>

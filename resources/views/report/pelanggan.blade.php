@@ -30,22 +30,34 @@
                                 <th>Area</th>
                                 <th>ODC dan ODP</th>
                                 <th>Tanggal Aktivasi</th>
+                                <th>Lama Berlangganan</th>
                                 <th>User PPPoE</th>
                                 <th>Password PPPoE</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($pelanggan as $data)
+                                @php
+                                    if ($data->area == 'perumahan') {
+                                        $area = \Str::title($data->area);
+                                    } else {
+                                        $area = \Str::title(str_replace('_', ' ', $data->area));
+                                    }
+                                @endphp
+
+
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $data->kode_pelanggan }}</td>
                                     <td>{{ $data->nama_pelanggan }}</td>
                                     <td>{{ $data->no_telepon }}</td>
                                     <td>{{ \Str::upper($data->blok) }}</td>
-                                    <td>{{ \Str::title($data->area) }}</td>
+                                    <td>{{ $area }}</td>
                                     <td>{{ $data->odpData->odc->odc_induk . '/' . $data->odpData->odc->odc . '/' . $data->odpData->odp }}
                                     </td>
                                     <td>{{ \Carbon\Carbon::parse($data->tanggal_aktivasi)->isoFormat('D MMM Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($data->tanggal_aktivasi)->diffForHumans() }}</td>
+
                                     <td>{{ $data->user_pppoe }}</td>
                                     <td>{{ $data->password_pppoe }}</td>
                                 </tr>
