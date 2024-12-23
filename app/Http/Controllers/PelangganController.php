@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use RouterOS\Query;
+use RouterOS\Client;
 use App\Models\Paket;
 use App\Models\Promo;
 use App\Models\DataODC;
@@ -136,7 +138,7 @@ class PelangganController extends Controller
     public function deactivate(Request $request, $id)
     {
         $pelanggan = Pelanggan::findOrFail($id);
-    
+
         if ($pelanggan->is_active) {
             $request->validate([
                 'alasan_nonaktif' => 'required|string|max:255',
@@ -145,6 +147,18 @@ class PelangganController extends Controller
             $pelanggan->is_active = false;
             $pelanggan->alasan_nonaktif = $request->alasan_nonaktif;
             $pelanggan->save();
+
+            $client = new Client(config('mikrotik.credential'));
+
+            $query = new Query('/ppp/secret/print');
+            $query->where('name', $pelanggan->user_pppoe);
+            $secret = $client->query($query)->read();
+
+            $query = (new Query('/ppp/secret/set'))
+                ->equal('.id', $secret[0]['.id'])
+                ->equal('disabled', 'yes');
+
+            $client->query($query)->read();
         
             toast('Langganan pelanggan berhasil dihentikan dengan alasan: ' . $request->alasan_nonaktif ,'success');
             return redirect()->back();
