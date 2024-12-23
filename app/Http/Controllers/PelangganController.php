@@ -154,6 +154,23 @@ class PelangganController extends Controller
             $query->where('name', $pelanggan->user_pppoe);
             $secret = $client->query($query)->read();
 
+            if (empty($secret)) {
+                toast('Gagal menonaktifkan pelanggan, user tidak ditemukan di mikrotik' ,'warning');
+                return redirect()->back();
+            }
+
+            // remove connection
+            $query = (new Query('/ppp/active/print'))
+                ->where('name', $pelanggan->user_pppoe);
+            $active = $client->query($query)->read();
+
+            if (!empty($active)) {
+                $query = (new Query('/ppp/active/remove'))
+                    ->equal('.id', $active[0]['.id']);
+                $client->query($query)->read();
+            }
+
+            // disable secret
             $query = (new Query('/ppp/secret/set'))
                 ->equal('.id', $secret[0]['.id'])
                 ->equal('disabled', 'yes');
