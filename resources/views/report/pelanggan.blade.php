@@ -43,6 +43,12 @@
                                     } else {
                                         $area = \Str::title(str_replace('_', ' ', $data->area));
                                     }
+
+                                    $lamaBerlangganan = \Carbon\Carbon::parse($data->tanggal_aktivasi)->diffForHumans(
+                                        null,
+                                        true,
+                                    );
+
                                 @endphp
 
 
@@ -56,7 +62,7 @@
                                     <td>{{ $data->odpData->odc->odc_induk . '/' . $data->odpData->odc->odc . '/' . $data->odpData->odp }}
                                     </td>
                                     <td>{{ \Carbon\Carbon::parse($data->tanggal_aktivasi)->isoFormat('D MMM Y') }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($data->tanggal_aktivasi)->diffForHumans() }}</td>
+                                    <td>{{ $lamaBerlangganan }}</td>
 
                                     <td>{{ $data->user_pppoe }}</td>
                                     <td>{{ $data->password_pppoe }}</td>

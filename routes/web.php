@@ -32,6 +32,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::resource('odp', ODPController::class);
 
     Route::get('/get-odp/{id}', [PelangganController::class, 'getODP']);
+    Route::post('/pelanggan/{id}/deactivate', [PelangganController::class, 'deactivate']);
 
     Route::get('/aktivasi-layanan', [AktivasiController::class, 'create'])->name('aktivasi.create');
     Route::post('/aktivasi-layanan', [AktivasiController::class, 'store'])->name('aktivasi.store');

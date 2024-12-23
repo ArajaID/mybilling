@@ -73,7 +73,7 @@
 
                     <strong><i class="mr-1 fas fa-clock"></i> Lama Berlangganan</strong>
                     <p class="text-muted">
-                        {{ \Carbon\Carbon::parse($pelanggan->tanggal_aktivasi)->diffForHumans() }}
+                        {{ \Carbon\Carbon::parse($pelanggan->tanggal_aktivasi)->diffForHumans(null, true) }}
                     </p>
 
                     <hr>

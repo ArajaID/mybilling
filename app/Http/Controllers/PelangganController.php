@@ -29,7 +29,7 @@ class PelangganController extends Controller
 
         return view('pelanggan.index', [
             'pelanggan' => $dataPelanggan,
-            'search' => $search
+            'search'    => $search
         ]);
     }
 
@@ -44,8 +44,8 @@ class PelangganController extends Controller
 
         return view('pelanggan.create', [
             'kodePelanggan' => $randomKodePelanggan,
-            'paketInet' => $paketInternet,
-            'dataODC' => $dataODC
+            'paketInet'     => $paketInternet,
+            'dataODC'       => $dataODC
         ]);
     }
 
@@ -62,7 +62,7 @@ class PelangganController extends Controller
             'blok'              => 'nullable',
             'rt'                => 'nullable',
             'area'              => 'required',
-            'odp_id'           => 'required',
+            'odp_id'            => 'required',
             'id_paket'          => 'required',
         ]);
 
@@ -97,9 +97,9 @@ class PelangganController extends Controller
         }
 
         return view('pelanggan.show', [
-            'pelanggan' => $dataPelanggan,
-            'historyTagihan' => $historyTagihan,
-            'promoActive' => $promoActive
+            'pelanggan'         => $dataPelanggan,
+            'historyTagihan'    => $historyTagihan,
+            'promoActive'       => $promoActive,
         ]);
     }
 
@@ -133,15 +133,25 @@ class PelangganController extends Controller
         return response()->json($dataODP);
     }
 
-    public function changeStatus(Request $request)
+    public function deactivate(Request $request, $id)
     {
-        $pelanggan = Pelanggan::find($request->pelanggan_id);
-        dd($pelanggan);
-        $pelanggan->is_active = $request->is_active;
-
-        $pelanggan->save();
-
-        return response()->json(['success'=>'Status change successfully.']);
-
+        $pelanggan = Pelanggan::findOrFail($id);
+    
+        if ($pelanggan->is_active) {
+            $request->validate([
+                'alasan_nonaktif' => 'required|string|max:255',
+            ]);
+    
+            $pelanggan->is_active = false;
+            $pelanggan->alasan_nonaktif = $request->alasan_nonaktif;
+            $pelanggan->save();
+        
+            toast('Langganan pelanggan berhasil dihentikan dengan alasan: ' . $request->alasan_nonaktif ,'success');
+            return redirect()->back();
+        
+        }
+    
+        toast('Pelanggan sudah tidak aktif' ,'warning');
+        return redirect()->back();
     }
 }

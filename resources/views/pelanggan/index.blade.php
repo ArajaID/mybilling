@@ -75,6 +75,19 @@
                                         <a href="#" class="btn btn-dark btn-sm"><i class="fas fa-print"></i> Cetak</a>
                                     @endif
                                 </td>
+
+                                <td>
+                                    @if ($data->is_active)
+                                        <form action="{{ url('/pelanggan/' . $data->id . '/deactivate') }}" method="POST">
+                                            @csrf
+                                            <label for="reason_{{ $data->id }}">Alasan:</label>
+                                            <input type="text" name="alasan_nonaktif" id="reason_{{ $data->id }}"
+                                                required>
+                                            <button type="submit" class="mb-1 btn btn-info btn-sm">Hentikan
+                                                Langganan</button>
+                                        </form>
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
