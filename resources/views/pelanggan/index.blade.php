@@ -44,6 +44,7 @@
                             <th>Paket</th>
                             <th>Status Aktivasi</th>
                             <th>Aksi</th>
+                            <th>Berhenti Berlangganan</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -65,29 +66,32 @@
                                     ? '<badge class="badge badge-success">Sudah Diaktivasi</badge>'
                                     : '<badge class="badge badge-danger">Belum Diaktivasi</badge>' !!}</td>
                                 <td>
-                                    <a href="{{ route('pelanggan.show', $data->id) }}" class="btn btn-warning btn-sm"><i
-                                            class="fas fa-eye"></i> Detail</a>
                                     @if (!$data->aktivasi_layanan)
                                         <a href="{{ route('aktivasi.create') . '?kode_pelanggan=' . $data->kode_pelanggan }}"
                                             class="btn btn-info btn-sm"><i class="fas fa-key"></i> Aktivasi</a>
                                     @endif
                                     @if ($data->aktivasi_layanan)
+                                        <a href="{{ route('pelanggan.show', $data->id) }}" class="btn btn-warning btn-sm"><i
+                                                class="fas fa-eye"></i> Detail</a>
                                         <a href="#" class="btn btn-dark btn-sm"><i class="fas fa-print"></i> Cetak</a>
                                     @endif
                                 </td>
-
-                                <td>
-                                    @if ($data->is_active)
-                                        <form action="{{ url('/pelanggan/' . $data->id . '/deactivate') }}" method="POST">
-                                            @csrf
-                                            <label for="reason_{{ $data->id }}">Alasan:</label>
-                                            <input type="text" name="alasan_nonaktif" id="reason_{{ $data->id }}"
-                                                required>
-                                            <button type="submit" class="mb-1 btn btn-info btn-sm">Hentikan
-                                                Langganan</button>
-                                        </form>
-                                    @endif
-                                </td>
+                                @if ($data->aktivasi_layanan)
+                                    <td>
+                                        @if ($data->is_active)
+                                            <form action="{{ url('/pelanggan/' . $data->id . '/deactivate') }}"
+                                                onsubmit="return confirmDeactivation(event, '{{ $data->nama_pelanggan }}')"
+                                                method="POST">
+                                                @csrf
+                                                <label for="reason_{{ $data->id }}">Alasan:</label>
+                                                <input type="text" name="alasan_nonaktif"
+                                                    id="reason_{{ $data->id }}" required>
+                                                <button type="submit" class="mb-1 btn btn-info btn-sm">Hentikan
+                                                    Langganan</button>
+                                            </form>
+                                        @endif
+                                    </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>
@@ -114,5 +118,14 @@
 @stop
 
 @section('js')
-
+    <script>
+        function confirmDeactivation(event, namaPelanggan) {
+            const confirmation = confirm(`Apakah Anda yakin ingin menghentikan langganan untuk ${namaPelanggan} ?`);
+            if (!confirmation) {
+                event.preventDefault(); // Membatalkan pengiriman form jika pengguna menolak
+                return false;
+            }
+            return true; // Lanjutkan pengiriman form jika pengguna mengonfirmasi
+        }
+    </script>
 @stop
