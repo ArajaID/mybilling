@@ -10,6 +10,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TagihanController;
 use App\Http\Controllers\AktivasiController;
+use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PemasukanController;
 use App\Http\Controllers\TutupBukuController;
@@ -59,3 +60,5 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 });
 
 Route::get('/send-telegram', [NotifikasiController::class, 'sendTelegram']);
+
+Route::post('/telegram/webhook', [TelegramController::class, 'webhook']);
