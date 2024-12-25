@@ -28,7 +28,7 @@ class TelegramController extends Controller
 
         // Perintah bot
         if (str_starts_with($text, '/start')) {
-            $nama = $update->getMessage()->getChat()->getFirstName();
+            $nama = $update->getMessage()->getChat()->getTitle();
 
             $telegram->sendMessage([
                 'chat_id' => $chatId,
