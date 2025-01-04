@@ -6,11 +6,12 @@ use App\Models\Paket;
 use App\Models\Promo;
 use App\Models\DataODP;
 use App\Models\Tagihan;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-
-use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Perangkat;
 use Spatie\Activitylog\LogOptions;
+
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Pelanggan extends Model
 {
@@ -56,5 +57,11 @@ class Pelanggan extends Model
     public function tagihan()
     {
         return $this->hasMany(Tagihan::class);
+    }
+
+    // relasi ke model perangkat 1 pelanggan memiliki 1 perangkat
+    public function perangkat()
+    {
+        return $this->hasOne(Perangkat::class, 'id');
     }
 }

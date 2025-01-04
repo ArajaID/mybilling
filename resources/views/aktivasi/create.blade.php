@@ -87,10 +87,18 @@
                             <div class="card-body">
                                 <div class="form-row">
 
-                                    <x-adminlte-select2 name="id_promo" label="Promo" fgroup-class="col-md-6" required>
+                                    <x-adminlte-select2 name="id_promo" label="Promo" fgroup-class="col-md-4" required>
                                         @foreach ($daftarPromo as $item)
                                             <option value="{{ $item->id }}">
                                                 {{ $item->kode_promo . ' - ' . $item->nama_promo }}</option>
+                                        @endforeach
+                                    </x-adminlte-select2>
+
+                                    <x-adminlte-select2 name="id_perangkat" label="Perangkat" fgroup-class="col-md-4"
+                                        required>
+                                        @foreach ($daftarPerangkat as $item)
+                                            <option value="{{ $item->id }}">
+                                                {{ $item->nama_perangkat . ' - ' . $item->sn }}</option>
                                         @endforeach
                                     </x-adminlte-select2>
 
@@ -98,7 +106,7 @@
                                         fgroup-class="col-md-2" value="{{ now()->format('Y-m-d') }}" required />
 
                                     <x-adminlte-input type="number" name="berlaku_bulan" label="Berlaku Bulan"
-                                        fgroup-class="col-md-1" value="{{ old('berlaku_bulan') }}" />
+                                        fgroup-class="col-md-2" value="{{ old('berlaku_bulan') }}" />
 
                                 </div>
                             </div>

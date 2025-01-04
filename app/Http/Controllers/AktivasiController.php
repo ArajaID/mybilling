@@ -9,6 +9,7 @@ use App\Models\Paket;
 use App\Models\Promo;
 use App\Models\Tagihan;
 use App\Models\Pelanggan;
+use App\Models\Perangkat;
 use Illuminate\Http\Request;
 use App\Models\PromoPelanggan;
 use Illuminate\Support\Facades\DB;
@@ -21,12 +22,14 @@ class AktivasiController extends Controller
 
         $queryPelanggan = Pelanggan::where('kode_pelanggan', $kodePelanggan)->where('is_active', 1)->where('aktivasi_layanan', 0)->first();
         $daftarPromo = Promo::where('status_promo', 1)->where('tanggal_berakhir', '>', now())->get();
+        $daftarPerangkat = Perangkat::where('is_active', 1)->get();
 
         if($queryPelanggan) {
             return view('aktivasi.create', [
                 'dataPelanggan' => $queryPelanggan,
                 'kodePelanggan' => $kodePelanggan,
-                'daftarPromo' => $daftarPromo
+                'daftarPromo' => $daftarPromo,
+                'daftarPerangkat' => $daftarPerangkat
             ]);
         } else {
             if($kodePelanggan) {
@@ -36,6 +39,7 @@ class AktivasiController extends Controller
                 'dataPelanggan' => 0,
                 'kodePelanggan' => $kodePelanggan,
                 'daftarPromo' => $daftarPromo,
+                'daftarPerangkat' => $daftarPerangkat
             ]);
         }
     }
@@ -70,7 +74,8 @@ class AktivasiController extends Controller
             // update data pelanggan filed aktivasi layanan
             $dataPelanggan->update([
                 'aktivasi_layanan' => 1,
-                'tanggal_aktivasi' => $klaimTgl
+                'tanggal_aktivasi' => $klaimTgl,
+                'id_perangkat'     => $request->id_perangkat
             ]);
 
             // logika untuk berlaku bulan upgrade speed

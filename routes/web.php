@@ -16,6 +16,7 @@ use App\Http\Controllers\PemasukanController;
 use App\Http\Controllers\TutupBukuController;
 use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\PengeluaranController;
+use App\Http\Controllers\PerangkatController;
 
 Route::get('/', function () {
     return redirect('login');
@@ -26,12 +27,13 @@ Auth::routes(['register' => false, 'verify' => true]);
 Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('paket', PaketController::class);
+    Route::resource('paket', PaketController::class)->except(['show', 'destroy']);
     Route::resource('pelanggan', PelangganController::class);
     Route::resource('promo', PromoController::class);
-    Route::resource('odc', ODCController::class);
-    Route::resource('odp', ODPController::class);
-
+    Route::resource('odc', ODCController::class)->except(['show', 'destroy']);
+    Route::resource('odp', ODPController::class)->except(['show', 'destroy']);
+    Route::resource('perangkat', PerangkatController::class)->except(['show', 'destroy']);
+    
     Route::get('/get-odp/{id}', [PelangganController::class, 'getODP']);
     Route::post('/pelanggan/{id}/deactivate', [PelangganController::class, 'deactivate']);
 

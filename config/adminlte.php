@@ -321,6 +321,12 @@ return [
             'active'    => ['paket', 'paket', 'paket*', 'regex:@^paket/[0-9]+$@']
         ],
         [
+            'text'      => 'ONU/ONT',
+            'url'       => 'perangkat',
+            'icon'      => 'fas fa-fw fa-hdd',
+            'active'    => ['perangkat', 'perangkat', 'perangkat*', 'regex:@^perangkat/[0-9]+$@']
+        ],
+        [
             'text'    => 'ODC dan ODP',
             'icon'    => 'fas fa-fw fa-boxes',
             'submenu' => [

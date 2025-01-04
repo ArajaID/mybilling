@@ -78,6 +78,13 @@
 
                     <hr>
 
+                    <strong><i class="mr-1 fas fa-clock"></i> ONU</strong>
+                    <p class="text-muted">
+                        {{ !$pelanggan->id_perangkat ? $pelanggan->perangkat->nama_perangkat . ' ' . $pelanggan->perangkat->sn : 'Belum ada ONU/ONT' }}
+                    </p>
+
+                    <hr>
+
                 </div>
             </div>
         </div>
