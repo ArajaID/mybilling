@@ -23,7 +23,7 @@ class Pelanggan extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-        ->logOnly(['kode_pelanggan', 'nama_pelanggan', 'email', 'no_telepon', 'blok', 'rt', 'area', 'odp_id', 'id_paket', 'user_pppoe', 'password_pppoe', 'is_active', 'aktivasi_layanan', 'tanggal_aktivasi'])
+        ->logOnly(['kode_pelanggan', 'nama_pelanggan', 'email', 'no_telepon', 'blok', 'rt', 'area', 'odp_id', 'id_perangkat', 'id_paket', 'user_pppoe', 'password_pppoe', 'is_active', 'aktivasi_layanan', 'tanggal_aktivasi'])
         ->useLogName('Pelanggan')
         ->setDescriptionForEvent(fn(string $eventName) => "This model has been {$eventName}")
         ->logOnlyDirty(true);
