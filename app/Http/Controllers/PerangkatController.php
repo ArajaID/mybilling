@@ -13,7 +13,7 @@ class PerangkatController extends Controller
     public function index()
     {
         // tampilkan data seluruh perangkat dan is_active = 1
-        $perangkats = Perangkat::where('is_active', 1)->get();
+        $perangkats = Perangkat::where('is_active', 1)->paginate(15);
         return view('perangkat.index', compact('perangkats'));
     }
 

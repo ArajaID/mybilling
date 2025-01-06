@@ -34,7 +34,8 @@
                             <td>{{ $data->merek }}</td>
                             <td>{{ $data->tipe }}</td>
                             <td>{{ $data->sn }}</td>
-                            <td></td>
+                            <td>{{ $data->pelanggan ? '(' . $data->pelanggan->kode_pelanggan . ') ' . $data->pelanggan->nama_pelanggan : 'Belum ada Pelanggan' }}
+                            </td>
                             <td>{!! $data->is_active
                                 ? "<span class='badge badge-success'>Aktif</span>"
                                 : "<span class='badge badge-danger'>Tidak Aktif</span>" !!}
@@ -46,6 +47,11 @@
                     @endforeach
                 </tbody>
             </table>
+            <div class="clearfix card-footer">
+                <ul class="float-right m-0 pagination pagination-sm">
+                    {{ $perangkats->links() }}
+                </ul>
+            </div>
         </div>
     </div>
 @stop

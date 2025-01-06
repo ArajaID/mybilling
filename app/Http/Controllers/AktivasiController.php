@@ -22,7 +22,10 @@ class AktivasiController extends Controller
 
         $queryPelanggan = Pelanggan::where('kode_pelanggan', $kodePelanggan)->where('is_active', 1)->where('aktivasi_layanan', 0)->first();
         $daftarPromo = Promo::where('status_promo', 1)->where('tanggal_berakhir', '>', now())->get();
-        $daftarPerangkat = Perangkat::where('is_active', 1)->get();
+        // query perangkat yang belum terpakai pelanggan lain
+        $daftarPerangkat = Perangkat::whereDoesntHave('pelanggan', function($query) {
+            $query->where('aktivasi_layanan', 1);
+        })->get();
 
         if($queryPelanggan) {
             return view('aktivasi.create', [
@@ -46,6 +49,10 @@ class AktivasiController extends Controller
 
     public function store(Request $request) {
         DB::transaction(function () use ($request) {
+            // validasi form id_perangkat required
+            $request->validate([
+                'id_perangkat' => 'required'
+            ]);
             // inisialisasi id pelanggan dan tanggal klaim
             $idPelanggan = $request->id_pelanggan;
             $klaimTgl    = $request->tanggal_klaim;

@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('nama_perangkat');
             $table->string('merek')->nullable();
             $table->string('tipe')->nullable();
-            $table->string('sn')->nullable();
-            $table->text('catatan')->nullable()->unique();
+            $table->string('sn')->nullable()->unique();
+            $table->text('catatan')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
