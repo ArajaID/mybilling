@@ -34,20 +34,23 @@ class TelegramController extends Controller
                 'chat_id' => $chatId,
                 'parse_mode' => 'HTML',
                 'text' => "Halo! <b>"  . $nama . "</b> Anda berada di grup yang diizinkan. Gunakan perintah:\n\n" .
-                            "/cektransaksi\n" .
+                            "/ceksaldo\n" .
                             "/pengeluaran [bulan] [tahun]\n" .
-                            "/pemasukan [bulan] [tahun]\n"
+                            "/pemasukan [bulan] [tahun]\n\n" .
+                            "/detailpelanggan [kode_pelanggan]\n"
                             // "/tambahpengeluaran [jumlah] [kategori] [metode_pembayaran] [deskripsi]\n\n" .
   
                             // "<i>Contoh: /tambahpengeluaran 1000000 Makanan QRIS Makanan di warteg</i>"
 
                 ]);
-            } elseif (str_starts_with($text, '/cektransaksi')) {
-                $this->cektransaksi($telegram, $chatId, $text);
+            } elseif (str_starts_with($text, '/ceksaldo')) {
+                $this->ceksaldo($telegram, $chatId, $text);
             } elseif (str_starts_with($text, '/pengeluaran')) {
                 $this->pengeluaran($telegram, $chatId, $text);
             } elseif (str_starts_with($text, '/pemasukan')) {
                 $this->pemasukan($telegram, $chatId, $text);
+            } elseif (str_starts_with($text, '/detailpelanggan')) {
+                $this->detailpelanggan($telegram, $chatId, $text);
             } else {
                 $telegram->sendMessage([
                     'chat_id' => $chatId,
@@ -58,7 +61,7 @@ class TelegramController extends Controller
         return response()->json(['status' => 'ok']);
     }
 
-    private function cektransaksi(Api $telegram, $chatId, $text)
+    private function ceksaldo(Api $telegram, $chatId, $text)
     {
         $transaksi = Transaksi::all();
         $totalPemasukan = $transaksi->where('jenis_transaksi', 'Pemasukan')->sum('debit');
@@ -127,6 +130,62 @@ class TelegramController extends Controller
             'parse_mode' => 'HTML',
             'text' => "<b>Total Pemasukan Bulan " . $bulan . " Tahun " . $tahun . " </b> : Rp. " . number_format($totalPemasukan, 0, ',', '.')
         ]);
+    }
+
+    private function detailpelanggan(Api $telegram, $chatId, $text) {
+        if (count(explode(' ', $text)) < 2) {
+            $telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => "Format tidak sesuai. Gunakan /detailpelanggan [kode_pelanggan]"
+            ]);
+            return;
+        }
+
+        $params = explode(' ', $text);
+        $kode_pelanggan = $params[1];
+
+        $pelanggan = Pelanggan::where('kode_pelanggan', $kode_pelanggan)->where('aktivasi_layanan', 1)->first();
+
+        if ($pelanggan) {
+            $noHp = $pelanggan->no_telepon ? $pelanggan->no_telepon : 'Tidak ada No HP';
+            $email = $pelanggan->email ? $pelanggan->email : 'Tidak ada No Email';
+
+            if($pelanggan->area == 'perumahan') {
+                $telegram->sendMessage([
+                    'chat_id' => $chatId,
+                    'parse_mode' => 'markdown',
+                    'text' => "*Detail Pelanggan 😊*\n\n" .
+                              "_Kode Pelanggan_\n" . '*' . $pelanggan->kode_pelanggan . '*' . "\n" .
+                              "_Nama Pelanggan_ \n " . '*' . $pelanggan->nama_pelanggan  . '*' ."\n" .
+                              "_Paket Internet_ \n " . '*' . $pelanggan->paket->nama_paket . '*' ."\n" .
+                              "_RT dan Blok_ \n " . '*' . $pelanggan->rt . ' - ' . $pelanggan->blok . '*' ."\n" .
+                              "_Email_ \n " . '*' . $email . '*' ."\n" .
+                              "_No HP_ \n " .  '*' .$noHp . '*' ."\n" .
+                              "_ODC/ODP_ \n " . '*' . $pelanggan->odpData->odc->odc_induk . '/' . $pelanggan->odpData->odc->odc . '/' . $pelanggan->odpData->odp .'*' . "\n" .
+                              "_Lama Berlangganan_ \n " . '*' . \Carbon\Carbon::parse($pelanggan->tanggal_aktivasi)->diffForHumans(null, true) . '*' ."\n" .
+                              "_ONU_ \n " . '*' . $pelanggan->perangkat->nama_perangkat . ' - ' . $pelanggan->perangkat->sn . '*' . "\n"
+                ]);
+            } else {
+                $telegram->sendMessage([
+                    'chat_id' => $chatId,
+                    'parse_mode' => 'markdown',
+                    'text' => "*Detail Pelanggan 😊*\n\n" .
+                              "_Kode Pelanggan_\n" . '*' . $pelanggan->kode_pelanggan . '*' . "\n" .
+                              "_Nama Pelanggan_ \n " . '*' . $pelanggan->nama_pelanggan  . '*' ."\n" .
+                              "_Paket Internet_ \n " . '*' . $pelanggan->paket->nama_paket . '*' ."\n" .
+                              "_Email_ \n " . '*' . $email . '*' ."\n" .
+                              "_No HP_ \n " .  '*' .$noHp . '*' ."\n" .
+                              "_ODC/ODP_ \n " . '*' . $pelanggan->odpData->odc->odc_induk . '/' . $pelanggan->odpData->odc->odc . '/' . $pelanggan->odpData->odp .'*' . "\n" .
+                              "_Lama Berlangganan_ \n " . '*' . \Carbon\Carbon::parse($pelanggan->tanggal_aktivasi)->diffForHumans(null, true) . '*' ."\n" .
+                              "_ONU_ \n " . '*' . $pelanggan->perangkat->nama_perangkat . ' - ' . $pelanggan->perangkat->sn . '*' . "\n"
+                ]);
+            }
+        } else {
+            $telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => "Pelanggan tidak ditemukan."
+            ]);
+        }
     }
 
     // private function tambahpengeluaran(Api $telegram, $chatId, $text)
