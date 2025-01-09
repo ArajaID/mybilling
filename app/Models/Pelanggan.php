@@ -62,6 +62,6 @@ class Pelanggan extends Model
     // relasi ke model perangkat 1 pelanggan memiliki 1 perangkat
     public function perangkat()
     {
-        return $this->hasOne(Perangkat::class, 'id');
+        return $this->hasOne(Perangkat::class, 'id', 'id_perangkat');
     }
 }
