@@ -44,11 +44,6 @@
         </div>
     </form>
 
-    <div class="text-center ">
-        <div class="p-2 card">
-            <h2 class="font-italic">Sebelum tutup buku diklik, harap cek data terlebih dahulu !</h2>
-        </div>
-    </div>
 
     <div class="row">
         <div class="col-md-12">
@@ -59,6 +54,14 @@
                         Tidak ada transaksi yang ditemukan dalam bulan dan tahun yang dipilih.
                     </x-adminlte-alert>
                 @else
+                    <div class="text-center ">
+                        <div class="p-2 card bg-red">
+                            <h2 class="font-italic font-weight-bold">Sebelum tutup buku diklik, harap cek data terlebih
+                                dahulu !</h2>
+                        </div>
+                    </div>
+
+
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">
