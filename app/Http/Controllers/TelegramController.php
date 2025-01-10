@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Telegram\Bot\Api;
+use App\Models\Tagihan;
 use App\Models\Pelanggan;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class TelegramController extends Controller
         if (!in_array($chatId, $allowedChatIds)) {
             // Jika chatId tidak diizinkan, bot tidak merespons
             return response()->json([
-                'message' => 'Unauthorized group',
+                'message' => 'Unauthorized',
             ], 403);
         }
 
@@ -36,7 +37,8 @@ class TelegramController extends Controller
                 'text' => "Halo! <b>"  . $nama . "</b> Anda berada di grup yang diizinkan. Gunakan perintah:\n\n" .
                             "/ceksaldo\n" .
                             "/pengeluaran [bulan] [tahun]\n" .
-                            "/pemasukan [bulan] [tahun]\n\n" .
+                            "/pemasukan [bulan] [tahun]\n" .
+                            "/tagihanPelanggan\n\n" .
                             "/detailpelanggan [kode_pelanggan]\n"
                             // "/tambahpengeluaran [jumlah] [kategori] [metode_pembayaran] [deskripsi]\n\n" .
   
@@ -51,10 +53,12 @@ class TelegramController extends Controller
                 $this->pemasukan($telegram, $chatId, $text);
             } elseif (str_starts_with($text, '/detailpelanggan')) {
                 $this->detailpelanggan($telegram, $chatId, $text);
+            } elseif(str_starts_with($text, '/tagihanPelanggan')) {
+                $this->tagihanPelanggan($telegram, $chatId, $text);
             } else {
                 $telegram->sendMessage([
                     'chat_id' => $chatId,
-                    'text' => "Perintah tidak dikenal. Gunakan /start untuk melihat daftar perintah."
+                    'text' => "Perintah tidak dikenal ⛔. Gunakan /start untuk melihat daftar perintah."
                 ]);
             }
 
@@ -82,7 +86,7 @@ class TelegramController extends Controller
         if (count(explode(' ', $text)) < 3) {
             $telegram->sendMessage([
                 'chat_id' => $chatId,
-                'text' => "Format tidak sesuai. Gunakan /pengeluaran [bulan] [tahun]"
+                'text' => "Format tidak sesuai ⛔. Gunakan /pengeluaran [bulan] [tahun]"
             ]);
             return;
         }
@@ -110,7 +114,7 @@ class TelegramController extends Controller
         if (count(explode(' ', $text)) < 3) {
             $telegram->sendMessage([
                 'chat_id' => $chatId,
-                'text' => "Format tidak sesuai. Gunakan /pemasukan [bulan] [tahun]"
+                'text' => "Format tidak sesuai ⛔. Gunakan /pemasukan [bulan] [tahun]"
             ]);
             return;
         }
@@ -136,7 +140,7 @@ class TelegramController extends Controller
         if (count(explode(' ', $text)) < 2) {
             $telegram->sendMessage([
                 'chat_id' => $chatId,
-                'text' => "Format tidak sesuai. Gunakan /detailpelanggan [kode_pelanggan]"
+                'text' => "Format tidak sesuai ⛔. Gunakan /detailpelanggan [kode_pelanggan]"
             ]);
             return;
         }
@@ -184,6 +188,28 @@ class TelegramController extends Controller
             $telegram->sendMessage([
                 'chat_id' => $chatId,
                 'text' => "Pelanggan tidak ditemukan."
+            ]);
+        }
+    }
+
+    private function tagihanPelanggan(Api $telegram, $chatId, $text) {
+        $tagihan = Tagihan::where('status_pembayaran', 'BELUM-LUNAS')->get();
+
+        if ($tagihan->count() > 0) {
+            $message = "*List Tagihan Aktif 😊*\n\n";
+            foreach ($tagihan as $key => $value) {
+                $message .= ($key + 1) . ". [" . $value->pelanggan->kode_pelanggan . '] ' . $value->pelanggan->nama_pelanggan . " - " . $value->deskripsi . " - Rp. " . number_format($value->jumlah_tagihan, 0, ',', '.') . "\n";
+            }
+
+            $telegram->sendMessage([
+                'chat_id' => $chatId,
+                'parse_mode' => 'markdown',
+                'text' => $message
+            ]);
+        } else {
+            $telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => "Tidak ada tagihan yang belum lunas. 😉"
             ]);
         }
     }
