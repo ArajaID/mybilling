@@ -3,9 +3,6 @@
 use App\Jobs\GenerateTagihan;
 use App\Jobs\CekBerlakuPromoJob;
 use App\Jobs\IsolirPelangganJob;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
 
 Schedule::command('queue:work --stop-when-empty')->everyMinute()->withoutOverlapping();
@@ -13,11 +10,12 @@ Schedule::command('queue:work --stop-when-empty')->everyMinute()->withoutOverlap
 Schedule::command('backup:run --only-db')->weekly();
 
 Schedule::job(new GenerateTagihan)
-->monthlyOn(15, '00:01');
+->monthlyOn(1, '00:05');
 
 Schedule::job(new IsolirPelangganJob)
-->monthlyOn(21, '23:59');
+->monthlyOn(22, '23:59');
 
 Schedule::job(new CekBerlakuPromoJob)->daily();
 
-Schedule::call('App\Http\Controllers\NotifikasiController@sendTelegram')->dailyAt('07:00');
+Schedule::call('App\Http\Controllers\NotifikasiController@sendTelegram')
+->twiceMonthly(15, 20, '06:00');
