@@ -198,8 +198,10 @@ class TelegramController extends Controller
         if ($tagihan->count() > 0) {
             $message = "*List Tagihan Aktif 😊*\n\n";
             foreach ($tagihan as $key => $value) {
-                $message .= ($key + 1) . ". [" . $value->pelanggan->kode_pelanggan . '] ' . $value->pelanggan->nama_pelanggan . " - " . $value->deskripsi . " - Rp. " . number_format($value->jumlah_tagihan, 0, ',', '.') . "\n";
+                $message .= ($key + 1) . ". [" . $value->pelanggan->kode_pelanggan . '] ' . $value->pelanggan->nama_pelanggan . " - " . $value->deskripsi . " - Rp. " . number_format($value->jumlah_tagihan, 0, ',', '.') . "\n\n";
             }
+
+            $message .= "Total Tagihan : " . number_format($tagihan->sum('jumlah_tagihan'), 0, ',', '.');
 
             $telegram->sendMessage([
                 'chat_id' => $chatId,
