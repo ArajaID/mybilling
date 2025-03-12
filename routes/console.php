@@ -18,4 +18,4 @@ Schedule::job(new IsolirPelangganJob)
 Schedule::job(new CekBerlakuPromoJob)->daily();
 
 Schedule::call('App\Http\Controllers\NotifikasiController@sendTelegram')
-->twiceMonthly(15, 20, '06:00');
+->monthlyOn(15, '06:00');
