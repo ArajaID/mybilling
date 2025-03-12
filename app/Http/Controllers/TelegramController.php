@@ -201,6 +201,8 @@ class TelegramController extends Controller
                 $message .= ($key + 1) . ". [" . $value->pelanggan->kode_pelanggan . '] ' . $value->pelanggan->nama_pelanggan . " - " . $value->deskripsi . " - Rp. " . number_format($value->jumlah_tagihan, 0, ',', '.') . "\n";
             }
 
+            $message .= "Total Tagihan : Rp. " . number_format($tagihan->sum('jumlah_tagihan'), 0, ',', '.');
+
             $telegram->sendMessage([
                 'chat_id' => $chatId,
                 'parse_mode' => 'markdown',
