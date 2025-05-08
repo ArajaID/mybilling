@@ -51,15 +51,10 @@ class GenerateTagihan implements ShouldQueue
 
             $jumlahTagihan = FinanceHelper::calculateTagihan($startDate, $monthlyFee);
 
-            $promoPelanggan = PromoPelanggan::where('id_pelanggan', $pelanggan->id)->first();
+            $promoPelanggan = $pelanggan->promo()->where('id_pelanggan', $pelanggan->id)->first();
+            // jika ada promo pelanggan sahabat aionios
             if($promoPelanggan) {
-                $promoActive = Promo::findOrFail($promoPelanggan->id_promo);
-            } else {
-                $promoActive = "";
-            }
-
-            if($promoActive->diskon) {
-                $totalTagihan = $jumlahTagihan - $promoActive->diskon;
+                $totalTagihan = $jumlahTagihan - $promoPelanggan->diskon;
             } else {
                 $totalTagihan = $jumlahTagihan;
             }
