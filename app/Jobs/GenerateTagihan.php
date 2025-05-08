@@ -4,10 +4,12 @@ namespace App\Jobs;
 
 use RouterOS\Query;
 use RouterOS\Client;
+use App\Models\Promo;
 use App\Models\Tagihan;
 use App\Models\Pelanggan;
 use Silvanix\Wablas\Message;
 use App\Helpers\FinanceHelper;
+use App\Models\PromoPelanggan;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -49,6 +51,19 @@ class GenerateTagihan implements ShouldQueue
 
             $jumlahTagihan = FinanceHelper::calculateTagihan($startDate, $monthlyFee);
 
+            $promoPelanggan = PromoPelanggan::where('id_pelanggan', $pelanggan->id)->first();
+            if($promoPelanggan) {
+                $promoActive = Promo::findOrFail($promoPelanggan->id_promo);
+            } else {
+                $promoActive = "";
+            }
+
+            if($promoActive->diskon) {
+                $totalTagihan = $jumlahTagihan - $promoActive->diskon;
+            } else {
+                $totalTagihan = $jumlahTagihan;
+            }
+
             // Simpan tagihan
             Tagihan::create([
                 'kode_tagihan'      => $kodeTagihan,
@@ -58,7 +73,7 @@ class GenerateTagihan implements ShouldQueue
                 'status_pembayaran' => 'BELUM-LUNAS',
                 'deskripsi'         => $desc,
                 'start_date'        => $startDate,
-                'jumlah_tagihan'    => $jumlahTagihan,
+                'jumlah_tagihan'    => $totalTagihan,
             ]);
         }
 

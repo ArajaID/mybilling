@@ -19,6 +19,7 @@ class Pelanggan extends Model
 
     protected $table = "tb_pelanggan";
     protected $guarded = ['id'];
+    protected $with = ['paket', 'odpData', 'perangkat', 'promo'];
 
     public function getActivitylogOptions(): LogOptions
     {
