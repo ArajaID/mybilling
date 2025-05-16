@@ -38,8 +38,10 @@ class TelegramController extends Controller
                             "/ceksaldo\n" .
                             "/pengeluaran [bulan] [tahun]\n" .
                             "/pemasukan [bulan] [tahun]\n" .
-                            "/tagihanPelanggan\n\n" .
-                            "/detailpelanggan [kode_pelanggan]\n"
+                            "/tagihanPelanggan\n" .
+                            "/notifikasiPelanggan\n\n" .
+
+                            "/detailPelanggan [kode_pelanggan]\n"
                             // "/tambahpengeluaran [jumlah] [kategori] [metode_pembayaran] [deskripsi]\n\n" .
   
                             // "<i>Contoh: /tambahpengeluaran 1000000 Makanan QRIS Makanan di warteg</i>"
@@ -55,6 +57,8 @@ class TelegramController extends Controller
                 $this->detailpelanggan($telegram, $chatId, $text);
             } elseif(str_starts_with($text, '/tagihanPelanggan')) {
                 $this->tagihanPelanggan($telegram, $chatId, $text);
+            } elseif(str_starts_with($text, '/notifikasiPelanggan')) {
+                $this->notifikasiPelanggan($telegram, $chatId, $text);
             } else {
                 $telegram->sendMessage([
                     'chat_id' => $chatId,
@@ -212,6 +216,29 @@ class TelegramController extends Controller
             $telegram->sendMessage([
                 'chat_id' => $chatId,
                 'text' => "Tidak ada tagihan yang belum lunas. 😉"
+            ]);
+        }
+    }
+
+    private function notifikasiPelanggan(Api $telegram, $chatId, $text) {
+         $dataTagihan = Tagihan::where('status_pembayaran', 'BELUM-LUNAS')->orderBy('tanggal_tagihan', 'asc')->get();
+
+        if ($dataTagihan->count() > 0) {
+            foreach($dataTagihan as $data) {
+                $tagihan = "Rp. " . number_format($data->jumlah_tagihan, 0, ",", ".");
+                
+                $link = "https://wa.me/+62" . substr($data->pelanggan->no_telepon, 1) . "?text=Pelanggan%20Yth,%20" . $data->pelanggan->nama_pelanggan . "%20" . $data->pelanggan->kode_pelanggan .  ",%20" . $data->deskripsi . "%20Internet%20Anda%20sebesar%20" . $tagihan . "%20sudah%20terbit.%20Mohon%20segera%20melakukan%20pembayaran%20sebelum%20tanggal%2020%20agar%20layanan%20tetap%20aktif.%20Terima%20kasih,%20Aionios.NET";
+                $htmlText = "Pelanggan Yth, *" . $data->pelanggan->nama_pelanggan . " (" . Str::upper($data->pelanggan->kode_pelanggan) . ")*. " . $data->deskripsi . " Internet Anda *" . $tagihan . ".* Mohon lakukan pembayaran sebelum tanggal 20 agar layanan tetap aktif. [Klik disini](" . $link . ")";
+                $telegram->sendMessage([
+                    'chat_id' => $chatId,
+                    'text' => $htmlText,
+                    'parse_mode' => 'Markdown'
+                ]);
+            }
+        } else {
+            $telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => "Tagihan sudah lunas. 😉"
             ]);
         }
     }
