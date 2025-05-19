@@ -31,7 +31,7 @@
                                 <td>{{ \Carbon\Carbon::parse($data->tanggal_tagihan)->format('d-m-Y') }}</td>
                                 <td>{{ $data->pelanggan->kode_pelanggan }}</td>
                                 <td>{{ $data->pelanggan->nama_pelanggan }}</td>
-                                <td>@currency($data->jumlah_tagihan)</td>
+                                <td class="text-right">@currency($data->jumlah_tagihan)</td>
                                 <td>{!! $data->status_pembayaran == 'BELUM-LUNAS'
                                     ? "<badge class='badge badge-danger'>Belum Lunas</badge>"
                                     : "<badge class='badge badge-success'>Lunas</badge>" !!}</td>
@@ -44,12 +44,21 @@
                                 </td>
                             </tr>
                         @endforeach
+                        <tr>
+                            <td colspan="5" class="text-center">Total Tagihan</td>
+                            <td class="text-right">
+                                @currency($totalTagihan)
+                            </td>
+                            <td colspan="3"></td>
+                        </tr>
+
                     </tbody>
                 </table>
             </div>
         </div>
     @else
-        <x-adminlte-alert class="text-center bg-warning" icon="fas fa-lg fa-exclamation-triangle" title="Oops" dismissable>
+        <x-adminlte-alert class="text-center bg-warning" icon="fas fa-lg fa-exclamation-triangle" title="Oops"
+            dismissable>
             Mohon maaf belum ada tagihan aktif!
         </x-adminlte-alert>
     @endif

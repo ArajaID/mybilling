@@ -19,7 +19,8 @@ class TagihanController extends Controller
         $dataTagihan = Tagihan::with('pelanggan')->where('status_pembayaran', 'BELUM-LUNAS')->get();
         
         return view('tagihan.index', [
-            'tagihan' => $dataTagihan
+            'tagihan' => $dataTagihan,
+            'totalTagihan' => $dataTagihan->sum('jumlah_tagihan'),
         ]);
     }
 
