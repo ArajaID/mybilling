@@ -77,6 +77,21 @@
             <!-- ./col -->
         </div>
 
+        <div class="row">
+            <div class="col-lg-12 col-6">
+                <!-- small box -->
+                <a href="{{ route('pelanggan-online') }}">
+                    <div class="text-center small-box bg-dark">
+                        <div class="inner">
+                            <h3>@currency($saldo)</h3>
+
+                            <p>Saldo</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
         {{-- <div class="row">
             <div class="col-md-4">
                 <div class="card">
@@ -151,10 +166,4 @@
 
 @section('css')
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-@stop
-
-@section('js')
-    <script>
-        console.log("Hi, I'm using the Laravel-AdminLTE package!");
-    </script>
 @stop
