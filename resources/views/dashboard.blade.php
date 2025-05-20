@@ -80,7 +80,7 @@
         <div class="row">
             <div class="col-lg-12 col-6">
                 <!-- small box -->
-                <a href="{{ route('pelanggan-online') }}">
+                <a href="{{ route('report.aruskas') }}">
                     <div class="text-center small-box bg-dark">
                         <div class="inner">
                             <h3>@currency($saldo)</h3>
