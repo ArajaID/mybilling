@@ -110,28 +110,6 @@ class TagihanController extends Controller
                 'deskripsi'         => $deskripsiTransaksi
             ]);
 
-            // perhitungan biaya admin penerimaan QRIS
-            if($metodePembayaran == "QRIS") {
-                if($jumlahDebit < 100000) {
-                    $biayaAdmin = $jumlahDebit;
-                } else {
-                    $potongan = 0.3;
-                    $biayaAdmin = ($potongan/100) * $jumlahDebit;
-                }
-            } else {
-                $biayaAdmin = $jumlahDebit;
-            }
-
-            $deskripsiBiayaAdmin = 'Admin Bank Penerimaan ' . $request->deskripsi . ' ' . $deskripsiTransaksi ;
-            Transaksi::create([
-                'jenis_transaksi'   => 'Pengeluaran',
-                'tanggal'           => $request->tanggal,
-                'sumber'            => $request->kode_tagihan,
-                'kredit'            => $biayaAdmin,
-                'kategori'          => 'Admin Bank',
-                'metode_pembayaran' => $metodePembayaran,
-                'deskripsi'         => $deskripsiBiayaAdmin
-            ]);
 
             $debit = 'Rp. ' . number_format($request->jumlah, 0, ',', '.');
             $tanggalTransaksi = Carbon::parse($request->tanggal)->format('d-m-Y');
@@ -143,7 +121,6 @@ class TagihanController extends Controller
                 $saldo += $data->debit - $data->kredit;
             }
             $formatSaldo = 'Rp. ' . number_format($saldo, 0, ',', '.');
-            $biayaAdminFormat = 'Rp. ' . number_format($biayaAdmin, 0, ',', '.');
             
 
 $htmlText = "*TRANSAKSI UANG MASUK* 🔽";
@@ -167,8 +144,30 @@ $htmlText .= "
                             'text' => $htmlText,
                             'parse_mode' => 'Markdown'
                         ]);
-            
 
+            // hitung potongan qris
+            if($metodePembayaran == "QRIS") {
+                if($jumlahDebit < 100000) {
+                    $biayaAdmin = $jumlahDebit;
+                } else {
+                    $potongan = 0.3;
+                    $biayaAdmin = ($potongan/100) * $jumlahDebit;
+                }
+
+                $deskripsiBiayaAdmin = 'Admin Bank Penerimaan ' . $request->deskripsi . ' ' . $deskripsiTransaksi;
+                Transaksi::create([
+                    'jenis_transaksi'   => 'Pengeluaran',
+                    'tanggal'           => $request->tanggal,
+                    'sumber'            => $request->kode_tagihan,
+                    'kredit'            => $biayaAdmin,
+                    'kategori'          => 'Admin Bank',
+                    'metode_pembayaran' => $metodePembayaran,
+                    'deskripsi'         => $deskripsiBiayaAdmin
+                ]);
+
+                $biayaAdminFormat = 'Rp. ' . number_format($biayaAdmin, 0, ',', '.');
+
+// Notifikasi telegram
 $htmlTextKeluar = "*TRANSAKSI UANG KELUAR* 🔼";
 $htmlTextKeluar .= "
 ✅ *BERHASIL*";
@@ -190,9 +189,8 @@ $htmlTextKeluar .= "
                             'text' => $htmlTextKeluar,
                             'parse_mode' => 'Markdown'
                         ]);
-                    
-                    });
-
+            }
+        });
 
         toast('Tagihan no ' . $request->kode_tagihan . ' Lunas!','success');
         return redirect()->route('tagihan.index');
