@@ -289,7 +289,6 @@ class TelegramController extends Controller
         $query =
             (new Query('/ip/firewall/nat/add'))
                 ->equal('chain', 'dstnat')
-                ->equal('dst-address', '10.22.30.4')
                 ->equal('protocol', 'tcp')
                 ->equal('dst-port', $port)
                 ->equal('in-interface', 'ether1-internet')
