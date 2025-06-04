@@ -292,7 +292,7 @@ class TelegramController extends Controller
                 ->equal('dst-address', '10.22.30.4')
                 ->equal('protocol', 'tcp')
                 ->equal('dst-port', $port)
-                ->equal('in-interface', 'ovpn-cendol-dawet')
+                ->equal('in-interface', 'ether1-internet')
                 ->equal('action', 'dst-nat')
                 ->equal('to-ports', '80')
                 ->equal('to-addresses', $pppActive[0]['address'])
