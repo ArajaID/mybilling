@@ -300,7 +300,7 @@ class TelegramController extends Controller
         // Send query and read response from RouterOS (ordinary answer from update/create/delete queries has empty body)
         $client->query($query)->read();
 
-        $linkRemote = 'Link remote ONT untuk pelanggan ' . $userPPPoE . ' telah dibuat. Silakan akses melalui link berikut ' . 'https://public-aionios.araja.my.id:' . $port;
+        $linkRemote = 'Link remote ONT untuk pelanggan ' . $userPPPoE . ' telah dibuat. Silakan akses melalui link berikut ' . 'http://public-aionios.araja.my.id:' . $port;
 
         $telegram->sendMessage([
                 'chat_id' => $chatId,
