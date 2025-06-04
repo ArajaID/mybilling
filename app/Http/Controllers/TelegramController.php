@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use RouterOS\Query;
+use RouterOS\Client;
 use Telegram\Bot\Api;
 use App\Models\Tagihan;
 use App\Models\Pelanggan;
 use App\Models\Transaksi;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class TelegramController extends Controller
@@ -41,7 +44,10 @@ class TelegramController extends Controller
                             "/tagihanPelanggan\n" .
                             "/notifikasiPelanggan\n\n" .
 
-                            "/detailPelanggan [kode_pelanggan]\n"
+                            "/detailPelanggan [kode_pelanggan]\n\n" .
+
+                            "/buatLinkRemoteONT [kode_pelanggan]\n" .
+                            "/hapusLinkRemoteONT [kode_pelanggan]\n"
                             // "/tambahpengeluaran [jumlah] [kategori] [metode_pembayaran] [deskripsi]\n\n" .
   
                             // "<i>Contoh: /tambahpengeluaran 1000000 Makanan QRIS Makanan di warteg</i>"
@@ -59,6 +65,10 @@ class TelegramController extends Controller
                 $this->tagihanPelanggan($telegram, $chatId, $text);
             } elseif(str_starts_with($text, '/notifikasiPelanggan')) {
                 $this->notifikasiPelanggan($telegram, $chatId, $text);
+            } elseif(str_starts_with($text, '/buatLinkRemoteONT')) {
+                $this->buatLinkRemoteONT($telegram, $chatId, $text);
+            } elseif(str_starts_with($text, '/hapusLinkRemoteONT')) {
+                $this->hapusLinkRemoteONT($telegram, $chatId, $text);
             } else {
                 $telegram->sendMessage([
                     'chat_id' => $chatId,
@@ -243,35 +253,101 @@ class TelegramController extends Controller
         }
     }
 
-    // private function tambahpengeluaran(Api $telegram, $chatId, $text)
-    // {
-        
-    //     if (count(explode(' ', $text)) < 5) {
-    //         $telegram->sendMessage([
-    //             'chat_id' => $chatId,
-    //             'text' => "Format tidak sesuai. Gunakan /tambahpengeluaran [tanggal] [jumlah] [kategori] [metode_pembayaran] [deskripsi]"
-    //         ]);
-    //         return;
-    //     }
+    private function buatLinkRemoteONT(Api $telegram, $chatId, $text) {
+        $params = explode(' ', $text);
+        $kode_pelanggan = $params[1];
 
-    //     $params = explode(' ', $text);
-    //     $jumlah = $params[1];
-    //     $kategori = $params[2];
-    //     $metode_pembayaran = $params[3];
-    //     $deskripsi = $params[4];
+        $pelanggan = Pelanggan::where('kode_pelanggan', $kode_pelanggan)->where('aktivasi_layanan', 1)->first();
+        // Cek apakah pelanggan ditemukan
+        if (!$pelanggan) {
+            $telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => "Pelanggan tidak ditemukan ☹"
+            ]);
+            return;
+        }
 
-    //     $transaksi = new Transaksi();
-    //     $transaksi->tanggal = now();
-    //     $transaksi->kredit = $jumlah;
-    //     $transaksi->kategori = $kategori;
-    //     $transaksi->metode_pembayaran = $metode_pembayaran;
-    //     $transaksi->deskripsi = $deskripsi;
-    //     $transaksi->jenis_transaksi = 'Pengeluaran';
-    //     $transaksi->save();
+        $userPPPoE = $pelanggan->user_pppoe;
 
-    //     $telegram->sendMessage([
-    //         'chat_id' => $chatId,
-    //         'text' => "Transaksi pengeluaran berhasil ditambahkan."
-    //     ]);
-    // }
+        $client = new Client(config('mikrotik.credential'));
+
+        $queryAddress = new Query('/ppp/active/print');
+        $queryAddress->where('name', $userPPPoE);
+        $pppActive = $client->query($queryAddress)->read();
+
+        // Cek apakah ada koneksi PPP aktif
+        if(count($pppActive) === 0) {
+            $telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => "Tidak ada koneksi PPPoE aktif. Pastikan router pelanggan terhubung."
+            ]);
+            return;
+        }
+
+        $port = rand(1000, 9999);
+
+        $query =
+            (new Query('/ip/firewall/nat/add'))
+                ->equal('chain', 'dstnat')
+                ->equal('dst-address', '10.22.30.4')
+                ->equal('protocol', 'tcp')
+                ->equal('dst-port', $port)
+                ->equal('in-interface', 'ovpn-cendol-dawet')
+                ->equal('action', 'dst-nat')
+                ->equal('to-ports', '80')
+                ->equal('to-addresses', $pppActive[0]['address'])
+                ->equal('comment', $userPPPoE);
+
+        // Send query and read response from RouterOS (ordinary answer from update/create/delete queries has empty body)
+        $client->query($query)->read();
+
+        $linkRemote = 'Link remote ONT untuk pelanggan ' . $userPPPoE . ' telah dibuat. Silakan akses melalui link berikut ' . 'https://tunnel.araja.my.id:' . $port;
+
+        $telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => $linkRemote
+        ]);
+    }
+
+    private function hapusLinkRemoteONT(Api $telegram, $chatId, $text) {
+        $params = explode(' ', $text);
+        $kode_pelanggan = $params[1];
+
+        $pelanggan = Pelanggan::where('kode_pelanggan', $kode_pelanggan)->where('aktivasi_layanan', 1)->first();
+        // Cek apakah pelanggan ditemukan
+        if (!$pelanggan) {
+            $telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => "Pelanggan tidak ditemukan ☹"
+            ]);
+            return;
+        }
+
+        $userPPPoE = 'router-mikrotik-server';
+
+        $client = new Client(config('mikrotik.credential'));
+
+        $queryFirewallNat = (new Query('/ip/firewall/nat/print'))
+                        ->where('comment', $userPPPoE);
+        $response = $client->query($queryFirewallNat)->read();
+
+        if(count($response) === 0) {
+            $telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => "Tidak ada link remote ONT yang ditemukan untuk pelanggan " . $userPPPoE
+            ]);
+            return;
+        }
+
+        $queryRemoveNat = (new Query('/ip/firewall/nat/remove'))
+                            ->equal('.id', $response[0]['.id']);
+        $client->query($queryRemoveNat)->read();
+
+         $messsageRemove = 'Link remote ONT untuk pelanggan ' . $userPPPoE . ' Berhasil dihapus.';
+
+        $telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => $messsageRemove
+        ]);
+    }
 }
